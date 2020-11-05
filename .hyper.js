@@ -6,14 +6,14 @@ module.exports = {
   config: {
     // choose either `'stable'` for receiving highly polished,
     // or `'canary'` for less polished but more frequent updates
-    updateChannel: "stable",
+    updateChannel: "canary",
 
     // default font size in pixels for all tabs
     fontSize: 12,
 
     // font family with optional fallbacks
     fontFamily:
-      '"Fira Code", Menlo, "DejaVu Sans Mono", Consolas, "Lucida Console", monospace',
+      '"IBM Plex Mono", Menlo, "DejaVu Sans Mono", Consolas, "Lucida Console", monospace',
 
     // default font weight: 'normal' or 'bold'
     fontWeight: "normal",
@@ -104,7 +104,7 @@ module.exports = {
     //
     // PowerShell on Windows
     // - Example: `C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe`
-    shell: "/usr/local/bin/zsh",
+    shell: "/bin/zsh",
 
     // for setting shell arguments (i.e. for using interactive shellArgs: `['-i']`)
     // by default `['--login']` will be used
@@ -148,17 +148,14 @@ module.exports = {
   //   `@company/project`
   //   `project#1.0.1`
   plugins: [
-    "hyper-search",
-    "hypergoogle",
-    "hypercwd",
     "hyper-statusline",
     "hyperterm-dibdabs",
     "hyper-tab-icons",
-    "git-falcon9",
     "hyper-postprocessing",
-    "hyper-john",
     "hyper-font-ligatures",
-    "hyper-sierra"
+    "hyper-sierra",
+    "hyperlinks",
+    "hyper-gcp-status-line"
   ],
 
   // in development, you can create a directory under

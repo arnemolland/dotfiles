@@ -1,22 +1,33 @@
 export PS1="arne %~ "
-export PATH="/usr/local/sbin:$PATH"
-export PATH=$HOME/bin:/usr/local/bin:$PATH
+export PATH=/usr/local/opt/ruby/bin:$PATH
+export PATH=/usr/local/bin:$PATH
+export PATH=$HOME/bin:$PATH
 export PATH=$PATH:$HOME/flutter/bin
 export PATH=$PATH:$HOME/.pub-cache/bin
 export PATH=$PATH:$HOME/Library/Android/sdk/platform-tools
-export PATH=$PATH:$HOME/protoc/bin
 export LANG=en_US.UTF-8
-export GOPATH=$HOME/go
-export PATH=$PATH:$(go env GOPATH)/bin
+export GOPRIVATE="github.com/sendd-app"
 export AWS_DEFAULT_PROFILE=arne
 export ANDROID_NDK_HOME="/usr/local/share/android-ndk"
 export ANDROID_SDK_ROOT="$HOME/Library/Android/sdk"
+export FLUTTER_ROOT="$HOME/flutter"
 export PATH=$PATH:$ANDROID_SDK_ROOT/tools/bin
+export PATH=$PATH:$ANDROID_SDK_ROOT/cmdline-tools/latest/bin
+export PATH=$PATH:$ANDROID_SDK_ROOT/emulator
+export PATH=$PATH:$HOME/.linkerd2/bin
 export TEAM_ID=2QDU4ARY99
+export JAVA_HOME=$HOME/.sdkman/candidates/java/current
+export ANDROID_HOME=$ANDROID_SDK_ROOT
+export STARSHIP_CONFIG=~/.config/starship.toml
+export KUBESAIL_CONFIG=$HOME/.kube/kubesail
+export KUBECONFIG=$HOME/.kube/config
+export GOPATH=$HOME/go
+export PATH=$PATH:$GOPATH/bin
+export FASTLANE_APPLE_APP_SPECIFIC_PASSWORD=hqat-bymz-bhfu-rkey
 
 # initial setup
 unsetopt PROMPT_SP
-neofetch --ascii $HOME/dnb/dnb-neofetch/dnb.txt
+neofetch --ascii $HOME/.config/neofetch/ascii-art/dnb.txt
 eval "$(starship init zsh)"
 # functions
 # upload to file.io
@@ -54,13 +65,13 @@ alias gproxy-off='sudo ssh -O exit gitproxy'
 export NO_PROXY=127.0.0.1,localhost
 
 # The next line updates PATH for the Google Cloud SDK.
-if [ -f '/Users/bruker/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/bruker/google-cloud-sdk/path.zsh.inc'; fi
+if [ -f '$HOME/google-cloud-sdk/path.zsh.inc' ]; then . '$HOME/google-cloud-sdk/path.zsh.inc'; fi
 
 # The next line enables shell command completion for gcloud.
-if [ -f '/Users/bruker/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/bruker/google-cloud-sdk/completion.zsh.inc'; fi
+if [ -f '$HOME/google-cloud-sdk/completion.zsh.inc' ]; then . '$HOME/google-cloud-sdk/completion.zsh.inc'; fi
 
-source /Users/bruker/.zsh/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh
-source /Users/bruker/.zsh/completion.zsh
+source $HOME/.zsh/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh
+source $HOME/.zsh/completion.zsh
 
 # Load completion config
 source $HOME/.zsh/completion.zsh
@@ -79,11 +90,11 @@ fi
 
 # Enhanced form of menu completion called `menu selection'
 zmodload -i zsh/complist
-source /Users/bruker/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
-source /Users/bruker/.zsh/history.zsh
+source $HOME/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
+source $HOME/.zsh/history.zsh
 alias ls='ls -G'
-source /Users/bruker/.zsh/key-bindings.zsh
-source /Users/bruker/.zsh/aliases.zsh
+source $HOME/.zsh/key-bindings.zsh
+source $HOME/.zsh/aliases.zsh
 
 export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
 
@@ -92,5 +103,8 @@ export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
 source <(kubectl completion zsh)
 
 #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
-export SDKMAN_DIR="/Users/bruker/.sdkman"
-[[ -s "/Users/bruker/.sdkman/bin/sdkman-init.sh" ]] && source "/Users/bruker/.sdkman/bin/sdkman-init.sh"
+export SDKMAN_DIR="$HOME/.sdkman"
+[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
+
+autoload -U +X bashcompinit && bashcompinit
+complete -o nospace -C /usr/local/bin/vault vault
