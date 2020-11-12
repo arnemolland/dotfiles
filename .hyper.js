@@ -6,14 +6,14 @@ module.exports = {
   config: {
     // choose either `'stable'` for receiving highly polished,
     // or `'canary'` for less polished but more frequent updates
-    updateChannel: "canary",
+    updateChannel: "stable",
 
     // default font size in pixels for all tabs
     fontSize: 12,
 
     // font family with optional fallbacks
     fontFamily:
-      '"IBM Plex Mono", Menlo, "DejaVu Sans Mono", Consolas, "Lucida Console", monospace',
+      '"IBM Plex Mono", "Blex", Menlo, "DejaVu Sans Mono", Consolas, "Lucida Console", monospace',
 
     // default font weight: 'normal' or 'bold'
     fontWeight: "normal",

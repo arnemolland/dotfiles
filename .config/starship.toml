@@ -1,0 +1,8 @@
+[nodejs]
+symbol = "🍃 "
+
+[git_branch]
+symbol = "ᛅ "
+
+[package]
+symbol = "🔖 "

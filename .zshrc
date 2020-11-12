@@ -1,12 +1,10 @@
 export PS1="arne %~ "
-export PATH=/usr/local/opt/ruby/bin:$PATH
 export PATH=/usr/local/bin:$PATH
 export PATH=$HOME/bin:$PATH
 export PATH=$PATH:$HOME/flutter/bin
 export PATH=$PATH:$HOME/.pub-cache/bin
 export PATH=$PATH:$HOME/Library/Android/sdk/platform-tools
 export LANG=en_US.UTF-8
-export GOPRIVATE="github.com/sendd-app"
 export AWS_DEFAULT_PROFILE=arne
 export ANDROID_NDK_HOME="/usr/local/share/android-ndk"
 export ANDROID_SDK_ROOT="$HOME/Library/Android/sdk"
@@ -15,7 +13,6 @@ export PATH=$PATH:$ANDROID_SDK_ROOT/tools/bin
 export PATH=$PATH:$ANDROID_SDK_ROOT/cmdline-tools/latest/bin
 export PATH=$PATH:$ANDROID_SDK_ROOT/emulator
 export PATH=$PATH:$HOME/.linkerd2/bin
-export TEAM_ID=2QDU4ARY99
 export JAVA_HOME=$HOME/.sdkman/candidates/java/current
 export ANDROID_HOME=$ANDROID_SDK_ROOT
 export STARSHIP_CONFIG=~/.config/starship.toml
@@ -23,7 +20,6 @@ export KUBESAIL_CONFIG=$HOME/.kube/kubesail
 export KUBECONFIG=$HOME/.kube/config
 export GOPATH=$HOME/go
 export PATH=$PATH:$GOPATH/bin
-export FASTLANE_APPLE_APP_SPECIFIC_PASSWORD=hqat-bymz-bhfu-rkey
 
 # initial setup
 unsetopt PROMPT_SP
