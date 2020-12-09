@@ -7,7 +7,17 @@ Darwin)
   ;;
 Linux)
   # commands for Linux go here
+  apt-add-repository https://cli.github.com/packages
   sudo apt update
+  apt-get update
+  apt-get install -y \
+    curl \
+    gh \
+    git \
+    gnupg2 \
+    jq \
+    sudo \
+    zsh
   yes | curl -fsSL https://starship.rs/install.sh | bash
   ;;
 esac
