@@ -17,7 +17,9 @@ Linux)
     gnupg2 \
     jq \
     sudo \
-    zsh
+    zsh \
+    unzip
   yes | curl -fsSL https://starship.rs/install.sh | bash
+  ./fonts.sh
   ;;
 esac
