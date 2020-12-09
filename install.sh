@@ -10,7 +10,7 @@ Linux)
   apt-add-repository https://cli.github.com/packages
   sudo apt update
   apt-get update
-  apt-get install -y \
+  sudo apt-get install -y \
     curl \
     gh \
     git \
