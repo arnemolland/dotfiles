@@ -20,6 +20,7 @@ Linux)
     zsh \
     unzip
   yes | curl -fsSL https://starship.rs/install.sh | bash
+  echo 'eval "(starship init zsh)"' >>$HOME/.zshrc
   ./fonts.sh
   ;;
 esac
