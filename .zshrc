@@ -71,7 +71,6 @@ source $HOME/.zsh/completion.zsh
 
 # Load completion config
 source $HOME/.zsh/completion.zsh
-source $HOME/.aws/aws_zsh_completer.sh
 
 # Initialize the completion system
 autoload -Uz compinit

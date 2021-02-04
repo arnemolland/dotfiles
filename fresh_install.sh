@@ -7,6 +7,13 @@ case `uname` in
     brew install $(<homebrew/packages.txt)
     brew tap homebrew/cask-fonts
     brew install --cask $(<homebrew/casks.txt)
+    cp .zshrc ~/.zshrc
+    cp -R .config ~/.config
+    cp -R .zsh ~/.zsh
+    cp -R .aws ~/.aws
+    git clone https://github.com/zsh-users/zsh-autosuggestions ~/.zsh/zsh-autosuggestions
+    git clone https://github.com/zsh-users/zsh-syntax-highlighting ~/.zsh/zsh-synyax-highlighting
+    git clone https://github.com/zdharma/fast-syntax-highlighting ~/.zsh/fast-syntax-highlighting
   ;;
   Linux)
     add-apt-repository ppa:dawidd0811/neofetch
