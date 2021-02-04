@@ -6,7 +6,7 @@ case `uname` in
     brew tap dart-lang/dart
     brew install $(<homebrew/packages.txt)
     brew tap homebrew/cask-fonts
-    brew cask install $(<homebrew/casks.txt)
+    brew install --cask $(<homebrew/casks.txt)
   ;;
   Linux)
     add-apt-repository ppa:dawidd0811/neofetch
