@@ -1,1 +1,1 @@
-ant awscli cocoapods dart docker gradle kubernetes-cli neofetch starship
+ant awscli cocoapods dart docker gradle kubernetes-cli neofetch starship tree
