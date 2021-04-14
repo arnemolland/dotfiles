@@ -1,3 +1,4 @@
+export PATH=$PATH:$HOME/flutter/bin
 export PS1="arne %~ "
 export PATH=/usr/local/bin:$PATH
 export PATH=$HOME/bin:$PATH
@@ -6,8 +7,8 @@ export PATH=$PATH:$HOME/.pub-cache/bin
 export PATH=$PATH:$HOME/Library/Android/sdk/platform-tools
 export LANG=en_US.UTF-8
 export AWS_DEFAULT_PROFILE=arne
-export ANDROID_NDK_HOME="/usr/local/share/android-ndk"
-export ANDROID_SDK_ROOT="$HOME/Library/Android/sdk"
+export ANDROID_NDK_HOME=/usr/local/share/android-ndk
+export ANDROID_SDK_ROOT=$HOME/Library/Android/sdk
 export FLUTTER_ROOT="$HOME/flutter"
 export PATH=$PATH:$ANDROID_SDK_ROOT/tools/bin
 export PATH=$PATH:$ANDROID_SDK_ROOT/cmdline-tools/latest/bin
@@ -20,6 +21,9 @@ export KUBESAIL_CONFIG=$HOME/.kube/kubesail
 export KUBECONFIG=$HOME/.kube/config
 export GOPATH=$HOME/go
 export PATH=$PATH:$GOPATH/bin
+export PATH=$PATH:$HOME/.dotnet/tools
+export EDITOR=$(which vim)
+
 
 # initial setup
 unsetopt PROMPT_SP
@@ -52,11 +56,6 @@ svgclean() {
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"                   # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && . "$NVM_DIR/bash_completion" # This loads nvm bash_completion
-
-#Git Proxy
-alias gproxy='sudo ssh -f -nNT gitproxy'
-alias gproxy-status='sudo ssh -O check gitproxy'
-alias gproxy-off='sudo ssh -O exit gitproxy'
 
 export NO_PROXY=127.0.0.1,localhost
 
@@ -103,3 +102,7 @@ export SDKMAN_DIR="$HOME/.sdkman"
 
 autoload -U +X bashcompinit && bashcompinit
 complete -o nospace -C /usr/local/bin/vault vault
+
+# Google Cloud SDK
+source /usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc
+source /usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc

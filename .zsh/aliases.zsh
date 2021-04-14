@@ -17,7 +17,12 @@ alias ...='cd ../..'
 alias ....='cd ../../..'
 alias less='less -R'
 alias g='git'
-
+alias k='kubectl'
+alias mk='minikube'
+alias cat='bat'
+alias tf='terraform'
+alias dc='docker-compose'
+alias mail='himalaya'
 alias rm='rm -i'                  # confirm removal
 alias cp='cp -i'                  # confirm copy
 alias mv='mv -i'                  # confirm move

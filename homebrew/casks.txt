@@ -1,1 +1,1 @@
-iterm2 slack docker android-sdk figma flipper tuntap visual-studio-code font-ibm-plex notion typora
+iterm2 slack docker android-sdk figma flipper tuntap visual-studio-code font-ibm-plex notion typora brooklyn

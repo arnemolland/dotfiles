@@ -1,1 +1,1 @@
-ant awscli cocoapods dart docker gradle kubernetes-cli neofetch starship tree google-cloud-sdk
+ant awscli cocoapods dart docker gradle kubernetes-cli neofetch starship tree google-cloud-sdk gcal jq
