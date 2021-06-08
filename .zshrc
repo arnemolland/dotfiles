@@ -24,34 +24,10 @@ export PATH=$PATH:$GOPATH/bin
 export PATH=$PATH:$HOME/.dotnet/tools
 export EDITOR=$(which vim)
 
-
 # initial setup
 unsetopt PROMPT_SP
-neofetch --ascii $HOME/.config/neofetch/ascii-art/dnb.txt
 eval "$(starship init zsh)"
-# functions
-# upload to file.io
-fileio() {
-    if [ -z "$1" ]; then
-        echo "No file passed."
-        return
-    fi
-    if [ -z "$2" ]; then
-        echo "No expiry date set. Defaulting to 2 years."
-        curl -s -F "file=@$1" "https://file.io/?expires=2y" | jq -r '.link' | pbcopy
-        echo "Copied to clipboard"
-    else
-        curl -s -F "file=@$1" "https://file.io/?expires=$2" | jq -r '.link' | pbcopy
-        echo "Copied to clipboard"
-    fi
-}
-
-# cleans all SVG files in directory
-svgclean() {
-    for file in *; do
-        svgcleaner "$file" "$file"
-    done
-}
+eval "$(goenv init -)"
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"                   # This loads nvm
@@ -89,6 +65,7 @@ source $HOME/.zsh/history.zsh
 alias ls='ls -G'
 source $HOME/.zsh/key-bindings.zsh
 source $HOME/.zsh/aliases.zsh
+source $HOME/.zsh/functions.zsh
 
 export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
 
@@ -106,3 +83,5 @@ complete -o nospace -C /usr/local/bin/vault vault
 # Google Cloud SDK
 source /usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc
 source /usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc
+
+complete -o nospace -C /usr/local/bin/terraform terraform
