@@ -29,6 +29,7 @@ export EDITOR=$(which vim)
 unsetopt PROMPT_SP
 eval "$(starship init zsh)"
 eval "$(goenv init -)"
+eval "$(direnv hook zsh)"
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"                   # This loads nvm
@@ -87,4 +88,7 @@ source /opt/homebrew/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.
 
 complete -o nospace -C /usr/local/bin/terraform terraform
 
+export PATH=$PATH:/Users/arnemolland/flutter/bin
 eval "$(/opt/homebrew/bin/brew shellenv)"
+
+export PATH=$PATH:/Users/arnemolland/flutter/bin
