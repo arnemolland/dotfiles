@@ -1,4 +1,5 @@
 export PATH=$PATH:$HOME/flutter/bin
+export PATH=$PATH:/opt/homebrew/bin
 export PS1="arne %~ "
 export PATH=/usr/local/bin:$PATH
 export PATH=$HOME/bin:$PATH
@@ -85,3 +86,6 @@ source /usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.z
 source /usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc
 
 complete -o nospace -C /usr/local/bin/terraform terraform
+
+export PATH=$PATH:/Users/arnemolland/flutter/bin
+eval "$(/opt/homebrew/bin/brew shellenv)"

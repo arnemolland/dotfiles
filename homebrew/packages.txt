@@ -1,1 +1,1 @@
-ant awscli cocoapods dart docker gradle kubernetes-cli google-cloud-sdk gcal jq direnv grep go node awscli azure-cli postgresql earthly scrcpy goenv grpcurl starship tree svgo protobuf direnv
+ant awscli cocoapods dart docker gradle kubernetes-cli gcal jq direnv grep go node awscli azure-cli postgresql earthly scrcpy goenv grpcurl starship tree svgo protobuf
