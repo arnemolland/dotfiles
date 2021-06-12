@@ -4,7 +4,7 @@ case `uname` in
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
     brew upgrade
     brew tap dart-lang/dart
-    brew install $(<homebrew/packages.txt)
+    brew install $(<homebrew/formulae.txt)
     brew tap homebrew/cask-fonts
     brew install --cask $(<homebrew/casks.txt)
     cp .zshrc ~/.zshrc
