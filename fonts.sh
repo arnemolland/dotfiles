@@ -22,9 +22,4 @@ case `uname` in
   ;;
 esac
 
-
-
-
-
-
 sudo fc-cache -fv

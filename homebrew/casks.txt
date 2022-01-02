@@ -1,1 +1,1 @@
-iterm2 slack docker android-sdk figma flipper visual-studio-code font-ibm-plex notion typora brooklyn bloomrpc popsql flipper insomnia google-cloud-sdk
+iterm2 slack docker android-sdk figma flipper visual-studio-code font-ibm-plex notion typora brooklyn bloomrpc popsql flipper insomnia google-cloud-sdk discord

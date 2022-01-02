@@ -1,1 +1,1 @@
-snapd neofetch android-sdk
+snapd neofetch android-sdk ant gradle jq direnv grep awscli postgresql scrcpy tree bat

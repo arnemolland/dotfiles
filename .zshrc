@@ -1,5 +1,4 @@
 export PATH=$PATH:$HOME/flutter/bin
-export PATH=$PATH:/opt/homebrew/bin
 export PS1="arne %~ "
 export PATH=/usr/local/bin:$PATH
 export PATH=$HOME/bin:$PATH
@@ -82,13 +81,21 @@ export SDKMAN_DIR="$HOME/.sdkman"
 autoload -U +X bashcompinit && bashcompinit
 complete -o nospace -C /usr/local/bin/vault vault
 
-# Google Cloud SDK
-source /opt/homebrew/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc
-source /opt/homebrew/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc
-
 complete -o nospace -C /usr/local/bin/terraform terraform
 
-export PATH=$PATH:/Users/arnemolland/flutter/bin
-eval "$(/opt/homebrew/bin/brew shellenv)"
+export PATH=$PATH:$HOME/flutter/bin
 
-export PATH=$PATH:/Users/arnemolland/flutter/bin
+case "$OSTYPE" in
+  darwin*)
+    eval "$(/opt/homebrew/bin/brew shellenv)"
+    source /opt/homebrew/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc
+    source /opt/homebrew/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc
+    export PATH=$PATH:/opt/homebrew/bin
+  ;;
+  linux*)
+    # ...
+  ;;
+  dragonfly*|freebsd*|netbsd*|openbsd*)
+    # ...
+  ;;
+esac
