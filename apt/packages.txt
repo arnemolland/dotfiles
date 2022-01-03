@@ -1,1 +1,1 @@
-snapd neofetch android-sdk ant gradle jq direnv grep awscli postgresql scrcpy tree bat
+snapd neofetch android-sdk ant gradle jq direnv grep awscli postgresql scrcpy tree bat protobuf-compiler
