@@ -1,1 +1,1 @@
-docker discord go
+docker discord go typora insomnia
