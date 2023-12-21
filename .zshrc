@@ -5,3 +5,5 @@ plugins=(git zsh-autosuggestions zsh-syntax-highlighting fast-syntax-highlightin
 source $ZSH/oh-my-zsh.sh
 
 autoload -Uz compinit; compinit
+
+alias cat='bat --paging=never'
