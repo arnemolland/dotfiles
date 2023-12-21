@@ -1,0 +1,5 @@
+orbstack
+zed
+visual-studio-code
+slack
+iterm2

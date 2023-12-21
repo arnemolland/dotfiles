@@ -1,1 +1,0 @@
-ant awscli cocoapods dart gradle kubernetes-cli helm gcal jq direnv grep go node deno awscli azure-cli postgresql earthly scrcpy goenv grpcurl starship tree svgo protobuf bat watch
