@@ -1,6 +1,6 @@
 export ZSH="$XDG_CONFIG_HOME/zsh/oh-my-zsh"
 
-plugins=(git)
+plugins=(git zsh-autosuggestions zsh-syntax-highlighting fast-syntax-highlighting zsh-autocomplete)
 
 source $ZSH/oh-my-zsh.sh
 
