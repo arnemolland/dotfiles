@@ -2,12 +2,26 @@
 
 export XDG_CONFIG_HOME="$HOME/.config"
 export XDG_DATA_HOME="$HOME/.local/share"
-export ZSH="$XDG_CONFIG_HOME/zsh/oh-my-zsh"
+export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
+export ZSH="$ZDOTDIR/oh-my-zsh"
 
 create_symlinks() {
     script_dir=$(dirname "$(readlink -f "$0")")
 
-    files=$(find . -maxdepth 1 -type f -name ".*")
+    # z-files, e.g. .zshrc, .zshenv, etc.
+    zfiles=$(find . -maxdepth 1 -type f -name "*.z*")
+    # non-z dotfles, e.g. .gitconfig, .gitignore, etc. has to start with a dot
+    files=$(find . -maxdepth 1 -type f -name ".*" ! -name "*.z*")
+
+    echo "zfiles: $zfiles"
+    echo "files: $files"
+
+    for zfile in $zfiles; do
+        name=$(basename $zfile)
+        echo "Creating symlink to $name in ${ZDOTDIR}."
+        rm -rf ${ZDOTDIR}/$name
+        ln -s $script_dir/$name ${ZDOTDIR}/$name
+    done
 
     for file in $files; do
         name=$(basename $file)
