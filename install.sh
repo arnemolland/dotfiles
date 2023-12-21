@@ -13,9 +13,6 @@ create_symlinks() {
     # non-z dotfles, e.g. .gitconfig, .gitignore, etc. has to start with a dot
     files=$(find . -maxdepth 1 -type f -name ".*" ! -name "*.z*")
 
-    echo "zfiles: $zfiles"
-    echo "files: $files"
-
     for zfile in $zfiles; do
         name=$(basename $zfile)
         echo "Creating symlink to $name in ${ZDOTDIR}."
@@ -29,6 +26,10 @@ create_symlinks() {
         rm -rf ${XDG_CONFIG_HOME}/$name
         ln -s $script_dir/$name ${XDG_CONFIG_HOME}/$name
     done
+
+    echo "Creating symlink to .zshenv in /etc/zshenv."
+    sudo rm -rf /etc/zshenv
+    sudo ln -s ${ZDOTDIR}/.zshenv /etc/zshenv
 }
 
 create_symlinks
