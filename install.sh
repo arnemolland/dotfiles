@@ -46,7 +46,7 @@ oh_my_zsh() {
 
 oh_my_zsh
 
-nvchad() {
+lazyvim() {
     if ! command -v nvim &> /dev/null; then
         echo "nvim is not installed; installing."
         case "$OSTYPE" in
@@ -63,13 +63,13 @@ nvchad() {
         esac
     fi
     if [ -d ${XDG_CONFIG_HOME}/nvim ]; then
-        echo "${XDG_CONFIG_HOME}/nvim already exists; skipping nvchad installation."
+        echo "${XDG_CONFIG_HOME}/nvim already exists; skipping lazyvim installation."
         return
     fi
-    git clone https://github.com/NvChad/NvChad ${XDG_CONFIG_HOME}/nvim --depth 1
+    git clone https://github.com/LazyVim/starter ${XDG_CONFIG_HOME}/nvim --depth 1
 }
 
-nvchad
+lazyvim
 
 nerd_fonts() {
     echo "Installing Go-Mono nerd-font."
