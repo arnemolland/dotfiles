@@ -5,6 +5,25 @@ export XDG_DATA_HOME="$HOME/.local/share"
 export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
 export ZSH="$ZDOTDIR/oh-my-zsh"
 
+homebrew() {
+    if ! command -v brew &> /dev/null; then
+        echo "Homebrew is not installed; installing."
+        case "$OSTYPE" in
+            linux*)
+                sudo apt install build-essential curl file git
+                /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+                ;;
+            darwin*)
+                /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+                ;;
+            *)
+                echo "Unknown OS; exiting."
+                exit 1
+                ;;
+        esac
+    fi
+}
+
 create_symlinks() {
     script_dir=$(dirname "$(readlink -f "$0")")
 
@@ -32,8 +51,6 @@ create_symlinks() {
     sudo ln -s ${ZDOTDIR}/.zshenv /etc/zshenv
 }
 
-create_symlinks
-
 oh_my_zsh() {
     export ZSH_CUSTOM="$ZSH/custom"
     sh -c "$(curl -sS https://starship.rs/install.sh)" -y -f
@@ -43,8 +60,6 @@ oh_my_zsh() {
     git clone https://github.com/zdharma-continuum/fast-syntax-highlighting.git $ZSH_CUSTOM/plugins/fast-syntax-highlighting
     git clone --depth 1 -- https://github.com/marlonrichert/zsh-autocomplete.git $ZSH_CUSTOM/plugins/zsh-autocomplete
 }
-
-oh_my_zsh
 
 lazyvim() {
     if ! command -v nvim &> /dev/null; then
@@ -69,8 +84,6 @@ lazyvim() {
     git clone https://github.com/LazyVim/starter ${XDG_CONFIG_HOME}/nvim --depth 1
 }
 
-lazyvim
-
 nerd_fonts() {
     echo "Installing Go-Mono nerd-font."
     curl -LO https://github.com/ryanoasis/nerd-fonts/releases/download/v3.1.1/Go-Mono.zip
@@ -93,10 +106,14 @@ nerd_fonts() {
     rm Go-Mono.zip && rm -rf Go-Mono
 }
 
+homebrew
+create_symlinks
+oh_my_zsh
+lazyvim
 nerd_fonts
 
 echo ""
-echo "====================="
-echo "Installation complete"
-echo "====================="
+echo "======================="
+echo " Installation complete "
+echo "======================="
 echo ""

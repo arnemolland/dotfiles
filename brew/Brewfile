@@ -1,0 +1,33 @@
+tap "homebrew/bundle"
+tap "homebrew/services"
+brew "bat"
+brew "coreutils" if OS.mac?
+brew "direnv"
+brew "gh"
+brew "gnupg" if OS.mac?
+brew "go"
+brew "k9s"
+brew "lazygit"
+brew "lua"
+brew "meilisearch", restart_service: true
+brew "nats-server", restart_service: true
+brew "neovim"
+brew "node"
+brew "pinentry-mac" if OS.mac?
+brew "postgresql@14", restart_service: true
+brew "redis", restart_service: true
+brew "ripgrep"
+brew "spaceship"
+brew "starship"
+brew "tmux"
+cask "docker" if OS.linux?
+cask "fig" if OS.mac?
+cask "iterm2" if OS.mac?
+cask "orbstack" if OS.mac?
+cask "tableplus" if OS.mac?
+cask "typora" if OS.mac?
+cask "visual-studio-code" if OS.mac?
+cask "zed" if OS.mac?
+cask "whalebrew"
+
+whalebrew "whalebrew/ffmpeg"
