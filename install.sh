@@ -49,6 +49,10 @@ create_symlinks() {
 	echo "Creating symlink to .zshenv in /etc/zshenv."
 	sudo rm -rf /etc/zshenv
 	sudo ln -s ${ZDOTDIR}/.zshenv /etc/zshenv
+
+	echo "Creating symlink for nvim config."
+	rm -rf ${XDG_CONFIG_HOME}/nvim
+	ln -s $script_dir/nvim ${XDG_CONFIG_HOME}/nvim
 }
 
 oh_my_zsh() {
