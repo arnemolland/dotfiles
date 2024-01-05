@@ -1,4 +1,3 @@
-
 -- every spec file under the "plugins" directory will be loaded automatically by lazy.nvim
 --
 -- In your plugin files, you can:
@@ -6,24 +5,26 @@
 -- * disable/enabled LazyVim plugins
 -- * override the configuration of LazyVim plugins
 return {
+  -- neo-tree
+  { "nvim-neo-tree/neo-tree.nvim", opts = { filesystem = { filtered_items = { visible = true } } } },
   -- Neoformat
-  { 'sbdchd/neoformat' },
+  { "sbdchd/neoformat" },
   -- Floatterm
-  { 'voldikss/vim-floaterm' },
+  { "voldikss/vim-floaterm" },
   -- Neogit
   {
     "NeogitOrg/neogit",
     dependencies = {
-      "nvim-lua/plenary.nvim",         -- required
-      "sindrets/diffview.nvim",        -- optional - Diff integration
-  
+      "nvim-lua/plenary.nvim", -- required
+      "sindrets/diffview.nvim", -- optional - Diff integration
+
       -- Only one of these is needed, not both.
       "nvim-telescope/telescope.nvim", -- optional
     },
-    config = true
+    config = true,
   },
   -- add github theme
-  { 'projekt0n/github-nvim-theme' },
+  { "projekt0n/github-nvim-theme" },
 
   -- Configure LazyVim to load gruvbox
   {
@@ -152,20 +153,40 @@ return {
     "nvim-treesitter/nvim-treesitter",
     opts = {
       ensure_installed = {
+        "c",
+        "c_sharp",
         "bash",
         "html",
         "javascript",
+        "css",
         "json",
+        "dart",
+        "dockerfile",
+        "go",
+        "gomod",
+        "graphql",
+        "gosum",
         "lua",
+        "java",
         "markdown",
         "markdown_inline",
         "python",
+        "proto",
+        "promql",
         "query",
         "regex",
+        "rust",
+        "sql",
+        "swift",
         "tsx",
         "typescript",
+        "toml",
+        "tsx",
         "vim",
         "yaml",
+        "hcl",
+        "terraform",
+        "zig",
       },
     },
   },
