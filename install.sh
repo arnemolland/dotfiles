@@ -31,6 +31,8 @@ create_symlinks() {
 	zfiles=$(find . -maxdepth 1 -type f -name "*.z*")
 	# non-z dotfles, e.g. .gitconfig, .gitignore, etc. has to start with a dot
 	files=$(find . -maxdepth 1 -type f -name ".*" ! -name "*.z*")
+	# config directories, e.g. alacritty, nvim, git, etc. but excluding .* directories
+	cfgdirs=$(find . -maxdepth 1 -type d -name "*" ! -name ".*")
 
 	for zfile in $zfiles; do
 		name=$(basename $zfile)
@@ -50,9 +52,12 @@ create_symlinks() {
 	sudo rm -rf /etc/zshenv
 	sudo ln -s ${ZDOTDIR}/.zshenv /etc/zshenv
 
-	echo "Creating symlink for nvim config."
-	rm -rf ${XDG_CONFIG_HOME}/nvim
-	ln -s $script_dir/nvim ${XDG_CONFIG_HOME}/nvim
+	for cfgdir in $cfgdirs; do
+		name=$(basename $cfgdir)
+		echo "Creating symlink to $name in ${XDG_CONFIG_HOME}."
+		rm -rf ${XDG_CONFIG_HOME}/$name
+		ln -s $script_dir/$name ${XDG_CONFIG_HOME}/$name
+	done
 }
 
 oh_my_zsh() {
