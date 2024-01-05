@@ -20,7 +20,7 @@ brew "ripgrep"
 brew "spaceship"
 brew "starship"
 brew "tmux"
-cask "docker" if OS.linux?
+brew "eza"
 cask "fig" if OS.mac?
 cask "iterm2" if OS.mac?
 cask "orbstack" if OS.mac?
