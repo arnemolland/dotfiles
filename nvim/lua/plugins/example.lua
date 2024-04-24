@@ -5,12 +5,16 @@
 -- * disable/enabled LazyVim plugins
 -- * override the configuration of LazyVim plugins
 return {
+  -- nui.nvim
+  { "MunifTanjim/nui.nvim" },
+  -- package-info.nvim
+  { "vuki/package-info.nvim" },
   -- neo-tree
   { "nvim-neo-tree/neo-tree.nvim", opts = { filesystem = { filtered_items = { visible = true } } } },
   -- Neoformat
   { "sbdchd/neoformat" },
-  -- Floatterm
-  { "voldikss/vim-floaterm" },
+  -- Toggleterm
+  { "akinsho/toggleterm.nvim", version = "*", opts = { open_mapping = "<c-t>" } },
   -- Neogit
   {
     "NeogitOrg/neogit",
@@ -73,7 +77,6 @@ return {
         desc = "Find Plugin File",
       },
     },
-    -- change some options
     opts = {
       defaults = {
         layout_strategy = "horizontal",
@@ -92,6 +95,16 @@ return {
       build = "make",
       config = function()
         require("telescope").load_extension("fzf")
+      end,
+    },
+  },
+  -- add package_info to telescope
+  {
+    "telescope.nvim",
+    dependencies = {
+      "vuki656/package-info.nvim",
+      config = function()
+        require("telescope").load_extension("package_info")
       end,
     },
   },
@@ -151,6 +164,9 @@ return {
   -- add more treesitter parsers
   {
     "nvim-treesitter/nvim-treesitter",
+    build = function(_) -- you can use a function to get the parent spec
+      vim.cmd("TSUpdate")
+    end,
     opts = {
       ensure_installed = {
         "c",
@@ -293,6 +309,17 @@ return {
           end
         end, { "i", "s" }),
       })
+    end,
+  },
+  {
+    "https://github.com/apple/pkl-neovim",
+    lazy = true,
+    event = "BufReadPre *.pkl",
+    dependencies = {
+      "nvim-treesitter/nvim-treesitter",
+    },
+    build = function()
+      vim.cmd("TSInstall! pkl")
     end,
   },
 }
