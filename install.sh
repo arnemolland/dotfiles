@@ -70,7 +70,7 @@ oh_my_zsh() {
 	git clone --depth 1 -- https://github.com/marlonrichert/zsh-autocomplete.git $ZSH_CUSTOM/plugins/zsh-autocomplete
 }
 
-lazyvim() {
+kickstart_nvim() {
 	if ! command -v nvim &>/dev/null; then
 		echo "nvim is not installed; installing."
 		case "$OSTYPE" in
@@ -87,10 +87,10 @@ lazyvim() {
 		esac
 	fi
 	if [ -d ${XDG_CONFIG_HOME}/nvim ]; then
-		echo "${XDG_CONFIG_HOME}/nvim already exists; skipping lazyvim installation."
+		echo "${XDG_CONFIG_HOME}/nvim already exists; skipping kickstart installation."
 		return
 	fi
-	git clone https://github.com/LazyVim/starter ${XDG_CONFIG_HOME}/nvim --depth 1
+	git clone https://github.com/nvim-lua/kickstart.nvim.git "${XDG_CONFIG_HOME:-$HOME/.config}"/nvim --depth 1
 }
 
 nerd_fonts() {
@@ -140,7 +140,7 @@ system_setup() {
 homebrew
 create_symlinks
 oh_my_zsh
-lazyvim
+kickstart_nvim
 nerd_fonts
 system_setup
 
