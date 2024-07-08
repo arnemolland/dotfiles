@@ -10,17 +10,16 @@ export ZSH_THEME="spaceship"
 fpath+=${ZSH_CUSTOM:-${ZSH:-~/.oh-my-zsh}/custom}/plugins/zsh-completions/src
 
 plugins=(git
-         zsh-syntax-highlighting 
-         fast-syntax-highlighting 
-         zsh-completions 
-         zsh-autosuggestions 
-         spaceship-vi-mode 
-         aws 
+         zsh-syntax-highlighting
+         fast-syntax-highlighting
+         zsh-completions
+         zsh-autosuggestions
+         spaceship-vi-mode
+         aws
          fzf
          terraform
          ssh-agent
-         kubectl 
-         vimond-zsh-plugin
+         kubectl
          autoupdate
         )
 
@@ -44,3 +43,6 @@ export NVM_DIR="$HOME/.nvm"
 #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
 export SDKMAN_DIR="$HOME/.sdkman"
 [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
+
+# bun completions
+[ -s "/Users/arne/.bun/_bun" ] && source "/Users/arne/.bun/_bun"

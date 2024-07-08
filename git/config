@@ -1,9 +1,6 @@
 [user]
 	name = Arne Molland
 	email = arne@molland.sh
-
-[url "ssh://git@github.com/"]
-	insteadOf = https://github.com/
 [commit]
 	gpgsign = true
 [push]
