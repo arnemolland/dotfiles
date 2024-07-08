@@ -6,6 +6,8 @@ export NVM_DIR="$XDG_DATA_HOME"/nvm
 export SPACEVIM_RUNTIMEPATH="$XDG_CONFIG_HOME/zsh/spaceship.zsh"
 export RPS1="%{$reset_color%}"
 export ZSH_THEME="spaceship"
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
 
 fpath+=${ZSH_CUSTOM:-${ZSH:-~/.oh-my-zsh}/custom}/plugins/zsh-completions/src
 
