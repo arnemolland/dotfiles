@@ -10,9 +10,23 @@ homebrew() {
 		echo "Homebrew is not installed; installing."
 		case "$OSTYPE" in
 		linux*)
-			sudo apt install build-essential curl file git
-			/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-			;;
+			case $(lsb_release -is) in
+			Ubuntu)
+				sudo apt update
+				sudo apt install build-essential curl file git
+				/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+				;;
+			# alpine
+			Alpine*)
+				sudo apk update --no-cache
+				sudo apk add build-base curl file git
+				/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+				;;
+			*)
+				echo "Unknown Linux distribution; exiting."
+				exit 1
+				;;
+			esac
 		darwin*)
 			/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 			;;
@@ -74,8 +88,20 @@ kickstart_nvim() {
 		echo "nvim is not installed; installing."
 		case "$OSTYPE" in
 		linux*)
-			sudo apt install neovim
-			;;
+			case $(lsb_release -is) in
+			Ubuntu)
+				sudo apt update
+				sudo apt install neovim
+				;;
+			# alpine
+			Alpine*)
+				sudo apk add neovim
+				;;
+			*)
+				echo "Unknown Linux distribution; exiting."
+				exit 1
+				;;
+			esac
 		darwin*)
 			/opt/homebrew/bin/brew install neovim
 			;;
