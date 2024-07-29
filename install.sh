@@ -27,6 +27,7 @@ homebrew() {
 				exit 1
 				;;
 			esac
+			;;
 		darwin*)
 			/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 			;;
@@ -102,6 +103,7 @@ kickstart_nvim() {
 				exit 1
 				;;
 			esac
+			;;
 		darwin*)
 			/opt/homebrew/bin/brew install neovim
 			;;
