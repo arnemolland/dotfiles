@@ -5,38 +5,46 @@ export XDG_DATA_HOME="$HOME/.local/share"
 export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
 export ZSH="$ZDOTDIR/oh-my-zsh"
 
-homebrew() {
-	if ! command -v brew &>/dev/null; then
-		echo "Homebrew is not installed; installing."
-		case "$OSTYPE" in
-		linux*)
-			case $(lsb_release -is) in
-			Ubuntu)
-				sudo apt update
-				sudo apt install build-essential curl file git
-				/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-				;;
-			# alpine
-			Alpine*)
-				sudo apk update --no-cache
-				sudo apk add build-base curl file git
-				/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-				;;
-			*)
-				echo "Unknown Linux distribution; exiting."
-				exit 1
-				;;
-			esac
+packages() {
+	case "$OSTYPE" in
+	linux*)
+		case $(lsb_release -is) in
+		Ubuntu)
+			if [ -f Aptfile ]; then
+				echo "Installing packages from Aptfile."
+				xargs -a Aptfile sudo apt-get install -y
+			else
+				echo "Aptfile not found; skipping package installation."
+			fi
 			;;
-		darwin*)
-			/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+		# alpine
+		Alpine*)
+			sudo apk update --no-cache
+			sudo apk add build-base curl file git
 			;;
 		*)
-			echo "Unknown OS; exiting."
+			echo "Unknown Linux distribution; exiting."
 			exit 1
 			;;
 		esac
-	fi
+		;;
+	darwin*)
+		if ! command -v brew &>/dev/null; then
+			echo "Homebrew is not installed; installing."
+			/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+		fi
+		if [ -f Brewfile ]; then
+			echo "Installing packages from Brewfile."
+			brew bundle --file=Brewfile
+		else
+			echo "Brewfile not found; skipping package installation."
+		fi
+		;;
+	*)
+		echo "Unknown OS; exiting."
+		exit 1
+		;;
+	esac
 }
 
 create_symlinks() {
