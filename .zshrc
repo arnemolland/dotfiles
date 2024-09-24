@@ -28,7 +28,11 @@ plugins=(git
 source $ZSH/oh-my-zsh.sh
 
 eval "$(/opt/homebrew/bin/brew shellenv)"
-eval `gdircolors $XDG_CONFIG_HOME/.dircolors`
+if [[ "$OSTYPE" == "darwin"* ]]; then
+  eval `gdircolors $XDG_CONFIG_HOME/.dircolors`
+else
+  eval `dircolors $XDG_CONFIG_HOME/.dircolors`
+fi
 eval "$(direnv hook zsh)"
 
 autoload -Uz compinit; compinit
