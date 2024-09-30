@@ -48,6 +48,14 @@ packages() {
 }
 
 create_symlinks() {
+	mkdir -p $XDG_CONFIG_HOME
+	mkdir -p $ZDOTDIR
+	mkdir -p $XDG_CONFIG_HOME/nvim
+	mkdir -p $XDG_CONFIG_HOME/tmux
+	mkdir -p $XDG_CONFIG_HOME/git
+	mkdir -p $XDG_CONFIG_HOME/htop
+	mkdir -p $XDG_CONFIG_HOME/lazygit
+	
 	script_dir=$(dirname "$(readlink -f "$0")")
 	# z-files, e.g. .zshrc, .zshenv, etc.
 	zfiles=$(find . -maxdepth 1 -type f -name "*.z*")
@@ -144,8 +152,8 @@ system_setup() {
         ' /etc/pam.d/sudo
 		;;
 	*)
-		echo "Not macOS; exiting."
-		exit 1
+		echo "Not macOS, skipping system setup."
+		return
 		;;
 	esac
 }
@@ -163,7 +171,7 @@ postinstall() {
     cat $(pwd)/git/postinstall >> $(pwd)/git/config
 }
 
-homebrew
+packages
 create_symlinks
 oh_my_zsh
 kickstart_nvim
