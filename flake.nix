@@ -23,6 +23,7 @@
   let
     system = "aarch64-darwin"; # Apple Silicon
     # system = "x86_64-darwin"; # Intel
+    linuxSystem = "x86_64-linux";
   in
   {
     darwinConfigurations.air = darwin.lib.darwinSystem {
@@ -42,6 +43,13 @@
         }
 
         inputs.nix-homebrew.darwinModules.nix-homebrew
+      ];
+    };
+
+    homeConfigurations.codespaces = home-manager.lib.homeManagerConfiguration {
+      pkgs = import nixpkgs { system = linuxSystem; };
+      modules = [
+        ./nix/home/codespaces.nix
       ];
     };
   };
