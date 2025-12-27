@@ -29,6 +29,7 @@
       "figma"
       "ghostty"
       "google-drive"
+      "logi-options+"
       "minecraft"
       "ollama-app"
       "orbstack"
@@ -40,6 +41,8 @@
       "vagrant"
       "zed"
       "vlc"
+      "chatgpt"
+      "tableplus"
     ];
 
     onActivation = {
