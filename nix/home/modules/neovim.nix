@@ -71,7 +71,16 @@ in
       opt.mouse = "a"
       opt.clipboard = "unnamedplus"
 
-      require("catppuccin").setup({ flavour = "macchiato" })
+      require("catppuccin").setup({
+        flavour = "mocha",
+        color_overrides = {
+          mocha = {
+            base = "#000000",
+            mantle = "#010101",
+            crust = "#020202",
+          },
+        },
+      })
       vim.cmd.colorscheme("catppuccin")
 
       require("lualine").setup({ options = { theme = "catppuccin" } })
@@ -156,7 +165,8 @@ in
       })
 
       local capabilities = require("cmp_nvim_lsp").default_capabilities()
-      local lspconfig = require("lspconfig")
+
+      vim.lsp.config("*", { capabilities = capabilities })
 
       local servers = {
         lua_ls = {
@@ -168,7 +178,7 @@ in
             },
           },
         },
-        tsserver = {},
+        ts_ls = {},
         gopls = {},
         rust_analyzer = {},
         zls = {},
@@ -181,8 +191,10 @@ in
       }
 
       for server, opts in pairs(servers) do
-        local options = vim.tbl_deep_extend("force", { capabilities = capabilities }, opts or {})
-        local ok, _ = pcall(lspconfig[server].setup, options)
+        if opts and next(opts) ~= nil then
+          vim.lsp.config(server, opts)
+        end
+        local ok, _ = pcall(vim.lsp.enable, server)
         if not ok then
           vim.notify("LSP " .. server .. " not available", vim.log.levels.INFO)
         end
