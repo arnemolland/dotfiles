@@ -61,14 +61,22 @@
     };
 
     plugins = [
-      { name = "zsh-autosuggestions"; src = pkgs.zsh-autosuggestions; }
-      { name = "zsh-syntax-highlighting"; src = pkgs.zsh-syntax-highlighting; }
-      { name = "fast-syntax-highlighting"; src = pkgs.zsh-fast-syntax-highlighting; }
-      { name = "zsh-completions"; src = pkgs.zsh-completions; }
+      {
+        name = "zsh-autosuggestions";
+        src = pkgs.zsh-autosuggestions;
+        file = "share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh";
+      }
+      {
+        name = "zsh-completions";
+        src = pkgs.zsh-completions;
+        file = "share/zsh/site-functions/_git";
+        completions = [ "share/zsh/site-functions" ];
+      }
     ];
 
     initContent = ''
       eval "$(/opt/homebrew/bin/brew shellenv)"
+      export PATH="$HOME/.nix-profile/bin:/etc/profiles/per-user/$USER/bin:/nix/var/nix/profiles/default/bin:$PATH"
 
       if [ -f "${config.xdg.configHome}/.dircolors" ]; then
         if command -v gdircolors >/dev/null; then
@@ -80,6 +88,9 @@
 
       eval "$(direnv hook zsh)"
       autoload -Uz compinit; compinit
+
+      ZSH_AUTOSUGGEST_STRATEGY=(history)
+      ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=8'
 
       export NVM_DIR="${config.xdg.dataHome}/nvm"
       [ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && . "/opt/homebrew/opt/nvm/nvm.sh"
