@@ -67,7 +67,6 @@
           {
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
-            home-manager.backupFileExtension = "backup";
             home-manager.users.arne = import ./nix/home/arne.nix;
           }
 
@@ -93,7 +92,6 @@
           {
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
-            home-manager.backupFileExtension = "backup";
             home-manager.users.arne = import ./nix/home/arne.nix;
           }
         ];

@@ -41,6 +41,7 @@
       "audio"
       "video"
       "input"
+      "podman"
     ];
     shell = pkgs.zsh;
   };
@@ -70,6 +71,16 @@
   };
 
   networking.networkmanager.enable = true;
+
+  virtualisation = {
+    containers.enable = true;
+    podman = {
+      enable = true;
+      dockerCompat = true;
+      dockerSocket.enable = true;
+      defaultNetwork.settings.dns_enabled = true;
+    };
+  };
 
   services = {
     dbus.enable = true;
@@ -140,6 +151,12 @@
     strace
     ltrace
     sysprof
+    podman
+    podman-compose
+    podman-desktop
+    docker-compose
     spotify
+    discord
+    slack
   ];
 }

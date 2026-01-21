@@ -78,7 +78,9 @@
       if [ -x /opt/homebrew/bin/brew ]; then
         eval "$(/opt/homebrew/bin/brew shellenv)"
       fi
-      export PATH="/run/wrappers/bin:$HOME/.nix-profile/bin:/etc/profiles/per-user/$USER/bin:/nix/var/nix/profiles/default/bin:$PATH"
+      # Ensure setuid wrappers (sudo, ping, etc.) win PATH resolution and keep PATH deduped.
+      typeset -U path PATH
+      path=(/run/wrappers/bin $HOME/.nix-profile/bin /etc/profiles/per-user/$USER/bin /nix/var/nix/profiles/default/bin $path)
 
       if [ -f "${config.xdg.configHome}/.dircolors" ]; then
         if command -v gdircolors >/dev/null; then
