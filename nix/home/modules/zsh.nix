@@ -5,9 +5,8 @@
     enable = true;
     enableCompletion = true;
     autocd = true;
-    # Keep zsh config under XDG while avoiding $HOME duplication in the generated .zshenv.
-    # Home Manager expects dotDir relative to $HOME, so derive a relative path from XDG_CONFIG_HOME.
-    dotDir = "${lib.removePrefix "${config.home.homeDirectory}/" config.xdg.configHome}/zsh";
+    # Keep zsh config under XDG without relying on a relative path (deprecated).
+    dotDir = "${config.xdg.configHome}/zsh";
 
     history = {
       path = "${config.xdg.dataHome}/zsh/history";
