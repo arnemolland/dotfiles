@@ -95,8 +95,12 @@ in
     heroic
     lutris
     wineWowPackages.stable
+    slack
     inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default
   ];
+
+  # Prefer Wayland where supported (e.g., Slack via Ozone).
+  environment.sessionVariables.NIXOS_OZONE_WL = "1";
 
   # Optional font mapping for private Berkeley Mono + Hyprland starter config
   environment.etc = fontEtc // {
