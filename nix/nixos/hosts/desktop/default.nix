@@ -68,18 +68,16 @@ in
     };
   };
 
-  # KDE Plasma (Wayland) with SDDM; Hyprland available as an alternate session
+  # KDE Plasma (Wayland) with SDDM
   services.displayManager.sddm = {
     enable = true;
     wayland.enable = true;
   };
   services.desktopManager.plasma6.enable = true;
-  programs.hyprland.enable = true;
   programs.gamescope = {
     enable = true;
     args = [ "--hdr-enabled" ];
   };
-  programs.waybar.enable = true;
 
   # Gaming stack
   programs = {
@@ -102,21 +100,6 @@ in
   # Prefer Wayland where supported (e.g., Slack via Ozone).
   environment.sessionVariables.NIXOS_OZONE_WL = "1";
 
-  # Optional font mapping for private Berkeley Mono + Hyprland starter config
-  environment.etc = fontEtc // {
-    "hypr/hyprland.conf".text = ''
-      $mod = SUPER
-      bind = $mod, RETURN, exec, ghostty
-      bind = $mod, Q, killactive
-      bind = $mod, D, exec, wofi --show drun
-      bind = $mod, E, exec, nautilus
-      bind = $mod, P, togglefloating
-      bind = $mod SHIFT, E, exit
-      exec-once = waybar
-
-      input {
-        kb_layout = no
-      }
-    '';
-  };
+  # Optional font mapping for private Berkeley Mono
+  environment.etc = fontEtc;
 }
