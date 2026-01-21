@@ -14,5 +14,5 @@
   home.homeDirectory = if pkgs.stdenv.isDarwin then "/Users/arne" else "/home/arne";
 
   # pick the HM state version you start with and keep it
-  home.stateVersion = "25.11";
+  home.stateVersion = "25.05";
 }

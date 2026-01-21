@@ -30,6 +30,10 @@ let
   ghosttyConfig = ''
     theme = catppuccin-mocha-oled
     background-opacity = 1.0
+    font = Berkeley Mono
+    font-bold = Berkeley Mono Bold
+    font-italic = Berkeley Mono Oblique
+    font-bold-italic = Berkeley Mono Bold Oblique
   '';
 in
 {

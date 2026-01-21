@@ -1,4 +1,8 @@
-{ config, pkgs, ... }:
+{ config
+, pkgs
+, lib
+, ...
+}:
 
 let
   # Upstream OPA tests fail; disable checks for now.
@@ -39,12 +43,12 @@ in
     rust-analyzer
     zls
     sqls
-    dockerfile-language-server
+    dockerfile-language-server-nodejs
     lua-language-server
     nodePackages.typescript-language-server
     pyright
-    surrealdb
     flyctl
+    bun
   ])
   ++ [
     (pkgs.writeShellScriptBin "ai-chat" ''
@@ -88,4 +92,39 @@ in
     nix-direnv.enable = true;
   };
 
+  # Optional Berkeley Mono on macOS: place .otf files at
+  # ~/.local/share/fonts/berkeley-mono/ (keep out of git if you sync). This lets
+  # fontconfig/Ghostty use them directly.
+  home.file =
+    let
+      fm = "${config.home.homeDirectory}/.local/share/fonts/berkeley-mono";
+      mk = name: {
+        name = ".local/share/fonts/berkeley-mono/${name}";
+        value.source = config.lib.file.mkOutOfStoreSymlink "${fm}/${name}";
+      };
+    in
+    builtins.listToAttrs (
+      map mk [
+        "BerkeleyMono-Thin.otf"
+        "BerkeleyMono-Thin-Oblique.otf"
+        "BerkeleyMono-ExtraLight.otf"
+        "BerkeleyMono-ExtraLight-Oblique.otf"
+        "BerkeleyMono-Light.otf"
+        "BerkeleyMono-Light-Oblique.otf"
+        "BerkeleyMono-SemiLight.otf"
+        "BerkeleyMono-SemiLight-Oblique.otf"
+        "BerkeleyMono-Regular.otf"
+        "BerkeleyMono-Oblique.otf"
+        "BerkeleyMono-Medium.otf"
+        "BerkeleyMono-Medium-Oblique.otf"
+        "BerkeleyMono-SemiBold.otf"
+        "BerkeleyMono-SemiBold-Oblique.otf"
+        "BerkeleyMono-Bold.otf"
+        "BerkeleyMono-Bold-Oblique.otf"
+        "BerkeleyMono-ExtraBold.otf"
+        "BerkeleyMono-ExtraBold-Oblique.otf"
+        "BerkeleyMono-Black.otf"
+        "BerkeleyMono-Black-Oblique.otf"
+      ]
+    );
 }

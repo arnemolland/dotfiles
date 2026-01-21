@@ -5,11 +5,6 @@
 
   system.startup.chime = false;
 
-  nixpkgs.config.allowUnfreePredicate = pkg:
-    builtins.elem (lib.getName pkg) [
-      "surrealdb"
-    ];
-
   environment.systemPackages = with pkgs; [
     just
     go

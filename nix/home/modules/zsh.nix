@@ -70,12 +70,13 @@
         name = "zsh-completions";
         src = pkgs.zsh-completions;
         file = "share/zsh/site-functions/_git";
-        completions = [ "share/zsh/site-functions" ];
       }
     ];
 
     initContent = ''
-      eval "$(/opt/homebrew/bin/brew shellenv)"
+      if [ -x /opt/homebrew/bin/brew ]; then
+        eval "$(/opt/homebrew/bin/brew shellenv)"
+      fi
       export PATH="$HOME/.nix-profile/bin:/etc/profiles/per-user/$USER/bin:/nix/var/nix/profiles/default/bin:$PATH"
 
       if [ -f "${config.xdg.configHome}/.dircolors" ]; then
@@ -93,11 +94,10 @@
       ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=8'
 
       export NVM_DIR="${config.xdg.dataHome}/nvm"
-      [ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && . "/opt/homebrew/opt/nvm/nvm.sh"
-      [ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && . "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"
-
-      export SDKMAN_DIR="${config.home.homeDirectory}/.sdkman"
-      [ -s "$SDKMAN_DIR/bin/sdkman-init.sh" ] && source "$SDKMAN_DIR/bin/sdkman-init.sh"
+      if [ -s "/opt/homebrew/opt/nvm/nvm.sh" ]; then
+        . "/opt/homebrew/opt/nvm/nvm.sh"
+        [ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && . "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"
+      fi
 
       # bun completions
       [ -s "${config.home.homeDirectory}/.bun/_bun" ] && source "${config.home.homeDirectory}/.bun/_bun"
