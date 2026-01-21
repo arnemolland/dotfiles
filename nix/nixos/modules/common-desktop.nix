@@ -140,5 +140,6 @@
     strace
     ltrace
     sysprof
+    spotify
   ];
 }

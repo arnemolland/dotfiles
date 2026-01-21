@@ -4,7 +4,7 @@
   inputs = {
     # Platform-specific nixpkgs
     nixpkgs-darwin.url = "github:NixOS/nixpkgs/nixpkgs-25.05-darwin";
-    nixpkgs-linux.url = "github:NixOS/nixpkgs/nixos-25.05";
+    nixpkgs-linux.url = "github:NixOS/nixpkgs/nixos-25.11";
 
     darwin.url = "github:nix-darwin/nix-darwin/nix-darwin-25.05";
     darwin.inputs.nixpkgs.follows = "nixpkgs-darwin";
@@ -12,7 +12,7 @@
     hm-darwin.url = "github:nix-community/home-manager/release-25.05";
     hm-darwin.inputs.nixpkgs.follows = "nixpkgs-darwin";
 
-    hm-linux.url = "github:nix-community/home-manager/release-25.05";
+    hm-linux.url = "github:nix-community/home-manager/release-25.11";
     hm-linux.inputs.nixpkgs.follows = "nixpkgs-linux";
 
     zen-browser = {

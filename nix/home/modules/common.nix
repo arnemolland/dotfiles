@@ -92,6 +92,12 @@ in
     nix-direnv.enable = true;
   };
 
+  programs.gh = {
+    enable = true;
+    # Default to SSH for repo interactions; matches typical Git setups.
+    settings.git_protocol = "ssh";
+  };
+
   # Optional Berkeley Mono on macOS: place .otf files at
   # ~/.local/share/fonts/berkeley-mono/ (keep out of git if you sync). This lets
   # fontconfig/Ghostty use them directly.
