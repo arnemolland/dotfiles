@@ -78,6 +78,10 @@
       libgcc
     ];
   };
+  programs.gnupg.agent = {
+    enable = true;
+    pinentryPackage = pkgs.pinentry-gnome3;
+  };
 
   networking.networkmanager.enable = true;
 
@@ -135,6 +139,7 @@
 
   environment.systemPackages = with pkgs; [
     git
+    gnupg
     curl
     wget
     unzip
