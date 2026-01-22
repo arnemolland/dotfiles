@@ -96,6 +96,7 @@ in
     lutris
     wineWowPackages.stable
     slack
+    dbpro
     inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default
   ];
 
