@@ -7,10 +7,15 @@
   # Base NixOS desktop defaults shared by hosts.
 
   system.stateVersion = "25.11";
-  nixpkgs.config = {
-    allowUnfree = true;
-    permittedInsecurePackages = [
-      "electron-36.9.5"
+  nixpkgs = {
+    config = {
+      allowUnfree = true;
+      permittedInsecurePackages = [
+        "electron-36.9.5"
+      ];
+    };
+    overlays = [
+      (import ../../overlays)
     ];
   };
 

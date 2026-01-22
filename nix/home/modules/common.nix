@@ -35,6 +35,8 @@ in
   home.packages = [
     customOpa
     pkgs.nixd
+    pkgs.nil
+    pkgs.flyctl
   ]
   ++ (with pkgs; [
     bat
