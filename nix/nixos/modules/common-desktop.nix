@@ -69,6 +69,15 @@
     enable = true;
     defaultEditor = true;
   };
+  programs.nix-ld = {
+    enable = true;
+    libraries = with pkgs; [
+      stdenv.cc.cc
+      zlib
+      openssl
+      libgcc
+    ];
+  };
 
   networking.networkmanager.enable = true;
 

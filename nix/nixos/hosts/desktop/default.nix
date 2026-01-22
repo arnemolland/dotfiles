@@ -41,6 +41,8 @@ in
 
   networking.hostName = "desktop";
 
+  home-manager.backupFileExtension = "bak";
+
   # X server toggle (Wayland primary via SDDM/Plasma 6, but enable X for compatibility)
   services.xserver.enable = true;
 

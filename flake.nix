@@ -5,6 +5,7 @@
     # Platform-specific nixpkgs
     nixpkgs-darwin.url = "github:NixOS/nixpkgs/nixpkgs-25.05-darwin";
     nixpkgs-linux.url = "github:NixOS/nixpkgs/nixos-25.11";
+    nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
 
     darwin.url = "github:nix-darwin/nix-darwin/nix-darwin-25.05";
     darwin.inputs.nixpkgs.follows = "nixpkgs-darwin";
@@ -48,6 +49,7 @@
     , hm-linux
     , nixpkgs-darwin
     , nixpkgs-linux
+    , nixpkgs-unstable
     , ...
     }:
     let
@@ -67,6 +69,7 @@
           {
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
+            home-manager.extraSpecialArgs = { inherit inputs; };
             home-manager.users.arne = import ./nix/home/arne.nix;
           }
 
@@ -92,6 +95,7 @@
           {
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
+            home-manager.extraSpecialArgs = { inherit inputs; };
             home-manager.users.arne = import ./nix/home/arne.nix;
           }
         ];

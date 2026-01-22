@@ -1,6 +1,7 @@
 { config
 , pkgs
 , lib
+, inputs
 , ...
 }:
 
@@ -9,6 +10,10 @@ let
   customOpa = pkgs.open-policy-agent.overrideAttrs (_: {
     doCheck = false;
   });
+  pkgsUnstable = import inputs.nixpkgs-unstable {
+    system = pkgs.stdenv.hostPlatform.system;
+    config = pkgs.config;
+  };
 in
 {
   xdg.enable = true;
@@ -48,7 +53,7 @@ in
     nodePackages.typescript-language-server
     pyright
     flyctl
-    bun
+    pkgsUnstable.bun
   ])
   ++ [
     (pkgs.writeShellScriptBin "ai-chat" ''
