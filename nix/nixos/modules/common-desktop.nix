@@ -1,7 +1,8 @@
-{ config
-, pkgs
-, inputs
-, ...
+{
+  config,
+  pkgs,
+  inputs,
+  ...
 }:
 {
   # Base NixOS desktop defaults shared by hosts.
@@ -174,6 +175,7 @@
     podman-compose
     podman-desktop
     docker-compose
+    libwebp
     spotify
     discord
     slack

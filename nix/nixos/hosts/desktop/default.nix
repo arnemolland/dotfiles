@@ -1,8 +1,9 @@
-{ config
-, pkgs
-, inputs
-, lib
-, ...
+{
+  config,
+  pkgs,
+  inputs,
+  lib,
+  ...
 }:
 
 let
@@ -57,6 +58,10 @@ in
   # NVIDIA setup for RTX 4080
   services.xserver.videoDrivers = [ "nvidia" ];
   hardware = {
+    bluetooth = {
+      enable = true;
+      settings.General.Experimental = true;
+    };
     graphics = {
       enable = true;
       enable32Bit = true; # needed for Steam/Proton

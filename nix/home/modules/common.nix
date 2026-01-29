@@ -1,8 +1,9 @@
-{ config
-, pkgs
-, lib
-, inputs
-, ...
+{
+  config,
+  pkgs,
+  lib,
+  inputs,
+  ...
 }:
 
 let
@@ -57,6 +58,39 @@ in
     flyctl
     pkgsUnstable.bun
   ])
+  ++ lib.optionals pkgs.stdenv.isLinux (
+    with pkgs;
+    [
+      # Puppeteer/Chromium runtime deps for Linux (chrome-headless-shell).
+      glib
+      nss
+      nspr
+      atk
+      at-spi2-atk
+      cups
+      libdrm
+      libxkbcommon
+      libxshmfence
+      mesa
+      pango
+      cairo
+      gdk-pixbuf
+      gtk3
+      alsa-lib
+      xorg.libX11
+      xorg.libXcomposite
+      xorg.libXdamage
+      xorg.libXext
+      xorg.libXfixes
+      xorg.libXrandr
+      xorg.libXrender
+      xorg.libXcursor
+      xorg.libXi
+      xorg.libXScrnSaver
+      xorg.libXtst
+      xorg.libxcb
+    ]
+  )
   ++ [
     (pkgs.writeShellScriptBin "ai-chat" ''
       set -euo pipefail
