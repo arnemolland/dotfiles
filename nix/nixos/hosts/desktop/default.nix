@@ -68,10 +68,11 @@ in
     };
     nvidia = {
       modesetting.enable = true;
-      powerManagement.enable = false; # desktop: avoid deep sleep quirks
+      powerManagement.enable = true; # desktop: avoid deep sleep quirks
+      powerManagement.finegrained = false;
       open = true;
       nvidiaSettings = true;
-      package = config.boot.kernelPackages.nvidiaPackages.production;
+      package = config.boot.kernelPackages.nvidiaPackages.stable;
     };
   };
 
@@ -91,6 +92,8 @@ in
     steam = {
       enable = true;
       gamescopeSession.enable = true;
+      remotePlay.openFirewall = true;
+      dedicatedServer.openFirewall = true;
     };
     gamemode.enable = true;
   };
