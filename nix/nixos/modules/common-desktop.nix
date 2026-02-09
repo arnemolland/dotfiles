@@ -62,7 +62,7 @@
     openFirewall = true;
     settings = {
       PermitRootLogin = "no";
-      PasswordAuthentication = false;
+      PasswordAuthentication = true;
       KbdInteractiveAuthentication = false;
       X11Forwarding = false;
     };
@@ -176,6 +176,7 @@
     podman-desktop
     docker-compose
     libwebp
+    vips
     spotify
     discord
     slack

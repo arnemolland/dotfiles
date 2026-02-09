@@ -52,7 +52,10 @@ in
   boot.loader.efi.canTouchEfiVariables = true;
 
   # Ryzen 9 power/perf defaults
-  boot.kernelParams = [ "amd_pstate=active" ];
+  boot.kernelParams = [
+    "amd_pstate=active"
+    "nvidia-drm.modeset=1"
+  ];
   services.power-profiles-daemon.enable = true;
 
   # NVIDIA setup for RTX 4080
