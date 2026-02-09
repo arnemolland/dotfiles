@@ -51,7 +51,7 @@ in
     rust-analyzer
     zls
     sqls
-    dockerfile-language-server
+    dockerfile-language-server-nodejs
     lua-language-server
     nodePackages.typescript-language-server
     pyright

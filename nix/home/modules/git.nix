@@ -5,11 +5,9 @@
     enable = true;
     lfs.enable = true;
     signing.signByDefault = true;
-    settings = {
-      user = {
-        name = "Arne Molland";
-        email = "arne@molland.sh";
-      };
+    userName = "Arne Molland";
+    userEmail = "arne@molland.sh";
+    extraConfig = {
       push.autoSetupRemote = true;
       pull.rebase = true;
       submodule.recurse = true;
