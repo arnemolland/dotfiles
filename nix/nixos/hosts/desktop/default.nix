@@ -73,7 +73,7 @@ in
       modesetting.enable = true;
       powerManagement.enable = true; # desktop: avoid deep sleep quirks
       powerManagement.finegrained = false;
-      open = true;
+      open = false;
       nvidiaSettings = true;
       package = config.boot.kernelPackages.nvidiaPackages.stable;
     };
@@ -82,7 +82,7 @@ in
   # KDE Plasma (Wayland) with SDDM
   services.displayManager.sddm = {
     enable = true;
-    wayland.enable = true;
+    wayland.enable = false;
   };
   services.desktopManager.plasma6.enable = true;
   programs.gamescope = {

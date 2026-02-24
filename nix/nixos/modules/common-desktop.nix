@@ -180,5 +180,6 @@
     spotify
     discord
     slack
+    obsidian
   ];
 }
