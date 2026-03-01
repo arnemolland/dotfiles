@@ -1,7 +1,5 @@
 {
   config,
-  pkgs,
-  inputs,
   lib,
   ...
 }:
@@ -36,7 +34,13 @@ let
 in
 {
   imports = [
-    ../../modules/common-desktop.nix
+    # Reusable modules — pick and choose per host
+    ../../modules/desktop/base.nix
+    ../../modules/desktop/environment.nix
+    ../../modules/desktop/development.nix
+    ../../modules/desktop/apps.nix
+    ../../modules/desktop/gaming.nix
+    # Machine-specific hardware
     ./hardware-configuration.nix
   ];
 
@@ -44,22 +48,39 @@ in
 
   home-manager.backupFileExtension = "bak";
 
-  # X server toggle (Wayland primary via SDDM/Plasma 6, but enable X for compatibility)
-  services.xserver.enable = true;
+  # X server (Wayland primary via SDDM/Plasma 6, X enabled for compat)
+  # NVIDIA RTX 4080
+  # KDE Plasma (Wayland) with SDDM
+  services = {
+    xserver = {
+      enable = true;
+      videoDrivers = [ "nvidia" ];
+    };
+    power-profiles-daemon.enable = true;
+    displayManager.sddm = {
+      enable = true;
+      wayland.enable = false;
+    };
+    desktopManager.plasma6.enable = true;
+  };
 
-  # Bootloader expects EFI; LUKS/btrfs reside in hardware-configuration.nix generated on the target.
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
+  # Bootloader — EFI; LUKS/btrfs in hardware-configuration.nix
+  boot = {
+    loader = {
+      systemd-boot = {
+        enable = true;
+        configurationLimit = 20;
+      };
+      efi.canTouchEfiVariables = true;
+    };
+    # Ryzen 9 power/perf
+    kernelParams = [
+      "amd_pstate=active"
+      "nvidia-drm.modeset=1"
+    ];
+  };
 
-  # Ryzen 9 power/perf defaults
-  boot.kernelParams = [
-    "amd_pstate=active"
-    "nvidia-drm.modeset=1"
-  ];
-  services.power-profiles-daemon.enable = true;
-
-  # NVIDIA setup for RTX 4080
-  services.xserver.videoDrivers = [ "nvidia" ];
+  # NVIDIA RTX 4080
   hardware = {
     bluetooth = {
       enable = true;
@@ -67,11 +88,11 @@ in
     };
     graphics = {
       enable = true;
-      enable32Bit = true; # needed for Steam/Proton
+      enable32Bit = true;
     };
     nvidia = {
       modesetting.enable = true;
-      powerManagement.enable = true; # desktop: avoid deep sleep quirks
+      powerManagement.enable = true;
       powerManagement.finegrained = false;
       open = false;
       nvidiaSettings = true;
@@ -79,41 +100,8 @@ in
     };
   };
 
-  # KDE Plasma (Wayland) with SDDM
-  services.displayManager.sddm = {
-    enable = true;
-    wayland.enable = false;
-  };
-  services.desktopManager.plasma6.enable = true;
-  programs.gamescope = {
-    enable = true;
-    args = [ "--hdr-enabled" ];
-  };
-
-  # Gaming stack
-  programs = {
-    steam = {
-      enable = true;
-      gamescopeSession.enable = true;
-      remotePlay.openFirewall = true;
-      dedicatedServer.openFirewall = true;
-    };
-    gamemode.enable = true;
-  };
-
-  environment.systemPackages = with pkgs; [
-    protonup-qt
-    heroic
-    lutris
-    wineWowPackages.stable
-    slack
-    dbpro
-    inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default
-  ];
-
-  # Prefer Wayland where supported (e.g., Slack via Ozone).
-  environment.sessionVariables.NIXOS_OZONE_WL = "1";
-
-  # Optional font mapping for private Berkeley Mono
+  # Private Berkeley Mono font mapping
   environment.etc = fontEtc;
+
+  system.stateVersion = "25.11";
 }

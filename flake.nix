@@ -43,14 +43,13 @@
   };
 
   outputs =
-    inputs@{ self
-    , darwin
-    , hm-darwin
-    , hm-linux
-    , nixpkgs-darwin
-    , nixpkgs-linux
-    , nixpkgs-unstable
-    , ...
+    inputs@{
+      darwin,
+      hm-darwin,
+      hm-linux,
+      nixpkgs-linux,
+      nixpkgs-unstable,
+      ...
     }:
     let
       system = "aarch64-darwin"; # Apple Silicon
@@ -63,14 +62,29 @@
         specialArgs = { inherit inputs; };
 
         modules = [
+          # Global nixpkgs config & overlays (evaluated once)
+          {
+            nixpkgs.config.allowUnfree = true;
+            nixpkgs.overlays = [
+              (_final: _prev: {
+                unstable = import nixpkgs-unstable {
+                  inherit system;
+                  config.allowUnfree = true;
+                };
+              })
+            ];
+          }
+
           ./nix/darwin/hosts/air.nix
 
           hm-darwin.darwinModules.home-manager
           {
-            home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
-            home-manager.extraSpecialArgs = { inherit inputs; };
-            home-manager.users.arne = import ./nix/home/arne.nix;
+            home-manager = {
+              useGlobalPkgs = true;
+              useUserPackages = true;
+              extraSpecialArgs = { inherit inputs; };
+              users.arne = import ./nix/home/arne.nix;
+            };
           }
 
           inputs.nix-homebrew.darwinModules.nix-homebrew
@@ -78,7 +92,17 @@
       };
 
       homeConfigurations.codespaces = hm-linux.lib.homeManagerConfiguration {
-        pkgs = import nixpkgs-linux { system = linuxSystem; };
+        pkgs = import nixpkgs-linux {
+          system = linuxSystem;
+          overlays = [
+            (_final: _prev: {
+              unstable = import nixpkgs-unstable {
+                system = linuxSystem;
+                config.allowUnfree = true;
+              };
+            })
+          ];
+        };
         modules = [
           ./nix/home/codespaces.nix
         ];
@@ -89,14 +113,33 @@
         specialArgs = { inherit inputs; };
 
         modules = [
+          # Global nixpkgs config & overlays (evaluated once)
+          {
+            nixpkgs.config = {
+              allowUnfree = true;
+              permittedInsecurePackages = [ ];
+            };
+            nixpkgs.overlays = [
+              (import ./nix/overlays)
+              (_final: _prev: {
+                unstable = import nixpkgs-unstable {
+                  system = linuxSystem;
+                  config.allowUnfree = true;
+                };
+              })
+            ];
+          }
+
           ./nix/nixos/hosts/desktop
 
           hm-linux.nixosModules.home-manager
           {
-            home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
-            home-manager.extraSpecialArgs = { inherit inputs; };
-            home-manager.users.arne = import ./nix/home/arne.nix;
+            home-manager = {
+              useGlobalPkgs = true;
+              useUserPackages = true;
+              extraSpecialArgs = { inherit inputs; };
+              users.arne = import ./nix/home/arne.nix;
+            };
           }
         ];
       };

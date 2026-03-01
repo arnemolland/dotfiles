@@ -10,9 +10,11 @@
     ./modules/ghostty.nix
   ];
 
-  home.username = "arne";
-  home.homeDirectory = if pkgs.stdenv.isDarwin then "/Users/arne" else "/home/arne";
+  home = {
+    username = "arne";
+    homeDirectory = if pkgs.stdenv.isDarwin then "/Users/arne" else "/home/arne";
 
-  # pick the HM state version you start with and keep it
-  home.stateVersion = "25.05";
+    # Must match the HM release each platform was first deployed with.
+    stateVersion = if pkgs.stdenv.isDarwin then "25.05" else "25.11";
+  };
 }

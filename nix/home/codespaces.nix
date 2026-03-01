@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ ... }:
 
 {
   imports = [
@@ -9,9 +9,11 @@
     ./modules/neovim.nix
   ];
 
-  home.username = "codespace";
-  home.homeDirectory = "/home/codespace";
+  home = {
+    username = "codespace";
+    homeDirectory = "/home/codespace";
 
-  # Keep in sync with HM release version.
-  home.stateVersion = "25.11";
+    # Keep in sync with HM release version.
+    stateVersion = "25.11";
+  };
 }

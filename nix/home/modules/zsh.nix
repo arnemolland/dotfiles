@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 {
   programs.zsh = {
@@ -74,37 +79,43 @@
       }
     ];
 
-    initContent = ''
-      if [ -x /opt/homebrew/bin/brew ]; then
-        eval "$(/opt/homebrew/bin/brew shellenv)"
-      fi
-      # Ensure setuid wrappers (sudo, ping, etc.) win PATH resolution and keep PATH deduped.
-      typeset -U path PATH
-      path=(/run/wrappers/bin $HOME/.nix-profile/bin /etc/profiles/per-user/$USER/bin /nix/var/nix/profiles/default/bin $path)
-
-      if [ -f "${config.xdg.configHome}/.dircolors" ]; then
-        if command -v gdircolors >/dev/null; then
-          eval "$(gdircolors "${config.xdg.configHome}/.dircolors")"
-        elif command -v dircolors >/dev/null; then
-          eval "$(dircolors "${config.xdg.configHome}/.dircolors")"
+    initContent = lib.concatStringsSep "\n" [
+      (lib.optionalString pkgs.stdenv.isDarwin ''
+        if [ -x /opt/homebrew/bin/brew ]; then
+          eval "$(/opt/homebrew/bin/brew shellenv)"
         fi
-      fi
+      '')
+      ''
+        # Ensure setuid wrappers (sudo, ping, etc.) win PATH resolution and keep PATH deduped.
+        typeset -U path PATH
+        path=(/run/wrappers/bin $HOME/.nix-profile/bin /etc/profiles/per-user/$USER/bin /nix/var/nix/profiles/default/bin $path)
 
-      eval "$(direnv hook zsh)"
-      autoload -Uz compinit; compinit
+        if [ -f "${config.xdg.configHome}/.dircolors" ]; then
+          if command -v gdircolors >/dev/null; then
+            eval "$(gdircolors "${config.xdg.configHome}/.dircolors")"
+          elif command -v dircolors >/dev/null; then
+            eval "$(dircolors "${config.xdg.configHome}/.dircolors")"
+          fi
+        fi
 
-      ZSH_AUTOSUGGEST_STRATEGY=(history)
-      ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=8'
+        eval "$(direnv hook zsh)"
+        autoload -Uz compinit; compinit
 
-      export NVM_DIR="${config.xdg.dataHome}/nvm"
-      if [ -s "/opt/homebrew/opt/nvm/nvm.sh" ]; then
-        . "/opt/homebrew/opt/nvm/nvm.sh"
-        [ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && . "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"
-      fi
-
-      # bun completions
-      [ -s "${config.home.homeDirectory}/.bun/_bun" ] && source "${config.home.homeDirectory}/.bun/_bun"
-    '';
+        ZSH_AUTOSUGGEST_STRATEGY=(history)
+        ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=8'
+      ''
+      (lib.optionalString pkgs.stdenv.isDarwin ''
+        export NVM_DIR="${config.xdg.dataHome}/nvm"
+        if [ -s "/opt/homebrew/opt/nvm/nvm.sh" ]; then
+          . "/opt/homebrew/opt/nvm/nvm.sh"
+          [ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && . "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"
+        fi
+      '')
+      ''
+        # bun completions
+        [ -s "${config.home.homeDirectory}/.bun/_bun" ] && source "${config.home.homeDirectory}/.bun/_bun"
+      ''
+    ];
   };
 
   home.file.".config/zsh/custom/themes/spaceship.zsh-theme".source =
