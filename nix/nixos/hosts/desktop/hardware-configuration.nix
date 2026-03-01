@@ -24,7 +24,8 @@
   ];
   boot.initrd.kernelModules = [ ];
   boot.extraModprobeConfig = ''
-    options nvidia_modeset vblank_sem_control=0 nvidia NVref_PreserveVideoMemoryAllocations=1 NVreg_TemporaryFilePath=/var/tmp
+    options nvidia_modeset vblank_sem_control=0
+    options nvidia NVreg_PreserveVideoMemoryAllocations=1 NVreg_TemporaryFilePath=/var/tmp NVreg_RegistryDwords=RMUseSwI2c=0x01;RMI2cSpeed=100
   '';
   boot.kernelModules = [
     "kvm-amd"

@@ -77,6 +77,7 @@ in
     kernelParams = [
       "amd_pstate=active"
       "nvidia-drm.modeset=1"
+      "nvidia-drm.fbdev=1"
     ];
   };
 
