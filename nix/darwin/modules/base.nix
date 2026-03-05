@@ -1,6 +1,11 @@
 { pkgs, ... }:
 
 {
+  nix.settings = {
+    experimental-features = [ "nix-command" "flakes" ];
+    trusted-users = [ "root" "arne" ];
+  };
+
   security.pam.services.sudo_local.touchIdAuth = true;
 
   system.startup.chime = false;
