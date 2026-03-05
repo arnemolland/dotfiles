@@ -3,14 +3,14 @@
 
   inputs = {
     # Platform-specific nixpkgs
-    nixpkgs-darwin.url = "github:NixOS/nixpkgs/nixpkgs-25.05-darwin";
+    nixpkgs-darwin.url = "github:NixOS/nixpkgs/nixpkgs-25.11-darwin";
     nixpkgs-linux.url = "github:NixOS/nixpkgs/nixos-25.11";
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
 
-    darwin.url = "github:nix-darwin/nix-darwin/nix-darwin-25.05";
+    darwin.url = "github:nix-darwin/nix-darwin/nix-darwin-25.11";
     darwin.inputs.nixpkgs.follows = "nixpkgs-darwin";
 
-    hm-darwin.url = "github:nix-community/home-manager/release-25.05";
+    hm-darwin.url = "github:nix-community/home-manager/release-25.11";
     hm-darwin.inputs.nixpkgs.follows = "nixpkgs-darwin";
 
     hm-linux.url = "github:nix-community/home-manager/release-25.11";
