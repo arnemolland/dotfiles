@@ -30,6 +30,7 @@ let
   ghosttyConfig = ''
     theme = catppuccin-mocha-oled
     background-opacity = 1.0
+    window-theme = dark
     font-family = Berkeley Mono
     font-family-bold = Berkeley Mono Bold
     font-family-italic = Berkeley Mono Oblique
