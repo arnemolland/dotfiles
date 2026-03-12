@@ -100,5 +100,12 @@ in
     port = 8188;
   };
 
+  # Prevent KWin from bypassing the compositor for fullscreen windows
+  # (direct scanout causes a black screen flash during mode renegotiation
+  # on NVIDIA).  Negligible perf cost on RTX 4080.
+  # VRR is set to "Always" via home-manager (plasma.nix) so the display
+  # never mode-switches between fixed and variable refresh.
+  environment.sessionVariables.KWIN_DRM_NO_DIRECT_SCANOUT = "1";
+
   system.stateVersion = "25.11";
 }

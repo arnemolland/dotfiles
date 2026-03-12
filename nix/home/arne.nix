@@ -9,6 +9,7 @@
     ./modules/neovim.nix
     ./modules/ghostty.nix
     ./modules/openfang.nix
+    ./modules/plasma.nix
   ];
 
   home = {
