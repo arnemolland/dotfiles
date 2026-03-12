@@ -21,6 +21,11 @@
       inputs.nixpkgs.follows = "nixpkgs-linux";
     };
 
+    comfyui-nix.url = "github:utensils/comfyui-nix";
+
+    sops-nix.url = "github:Mic92/sops-nix";
+    sops-nix.inputs.nixpkgs.follows = "nixpkgs-linux";
+
     nix-homebrew.url = "github:zhaofengli/nix-homebrew";
 
     # Pinned taps
@@ -114,6 +119,8 @@
           }
 
           ./nix/nixos/hosts/desktop
+
+          inputs.sops-nix.nixosModules.sops
 
           hm-linux.nixosModules.home-manager
           {

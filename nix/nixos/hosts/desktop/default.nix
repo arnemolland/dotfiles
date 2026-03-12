@@ -1,6 +1,8 @@
 {
   config,
   lib,
+  pkgs,
+  inputs,
   ...
 }:
 
@@ -22,8 +24,12 @@ in
     ../../modules/desktop/development.nix
     ../../modules/desktop/apps.nix
     ../../modules/desktop/gaming.nix
+    ../../modules/desktop/github-runner.nix
     # Machine-specific hardware
     ./hardware-configuration.nix
+
+    # ComfyUI
+    inputs.comfyui-nix.nixosModules.default
   ];
 
   networking.hostName = "desktop";
@@ -85,6 +91,14 @@ in
 
   # Private Berkeley Mono font mapping
   environment.etc = fontEtc;
+
+  # ComfyUI service (NVIDIA RTX 4080)
+  services.comfyui = {
+    enable = true;
+    package = inputs.comfyui-nix.packages.${pkgs.stdenv.hostPlatform.system}.cuda;
+    enableManager = true;
+    port = 8188;
+  };
 
   system.stateVersion = "25.11";
 }

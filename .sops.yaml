@@ -1,0 +1,8 @@
+keys:
+  - &desktop age15t9yl2pxl0yyr3mlj5a0antswu0vzpr9rxfthtksycdvm7nqee4qpwsukc
+
+creation_rules:
+  - path_regex: nix/nixos/secrets/.*\.json$
+    key_groups:
+      - age:
+          - *desktop
