@@ -5,32 +5,14 @@
 }:
 
 let
+  fonts = import ../../../lib/fonts.nix;
   fm = "/etc/nixos/private/fonts/berkeley-mono";
-  fontEtc = lib.optionalAttrs (builtins.pathExists fm) {
-    "fonts/local/BerkeleyMono-Thin.otf".source = "${fm}/BerkeleyMono-Thin.otf";
-    "fonts/local/BerkeleyMono-Thin-Oblique.otf".source = "${fm}/BerkeleyMono-Thin-Oblique.otf";
-    "fonts/local/BerkeleyMono-ExtraLight.otf".source = "${fm}/BerkeleyMono-ExtraLight.otf";
-    "fonts/local/BerkeleyMono-ExtraLight-Oblique.otf".source =
-      "${fm}/BerkeleyMono-ExtraLight-Oblique.otf";
-    "fonts/local/BerkeleyMono-Light.otf".source = "${fm}/BerkeleyMono-Light.otf";
-    "fonts/local/BerkeleyMono-Light-Oblique.otf".source = "${fm}/BerkeleyMono-Light-Oblique.otf";
-    "fonts/local/BerkeleyMono-SemiLight.otf".source = "${fm}/BerkeleyMono-SemiLight.otf";
-    "fonts/local/BerkeleyMono-SemiLight-Oblique.otf".source =
-      "${fm}/BerkeleyMono-SemiLight-Oblique.otf";
-    "fonts/local/BerkeleyMono-Regular.otf".source = "${fm}/BerkeleyMono-Regular.otf";
-    "fonts/local/BerkeleyMono-Oblique.otf".source = "${fm}/BerkeleyMono-Oblique.otf";
-    "fonts/local/BerkeleyMono-Medium.otf".source = "${fm}/BerkeleyMono-Medium.otf";
-    "fonts/local/BerkeleyMono-Medium-Oblique.otf".source = "${fm}/BerkeleyMono-Medium-Oblique.otf";
-    "fonts/local/BerkeleyMono-SemiBold.otf".source = "${fm}/BerkeleyMono-SemiBold.otf";
-    "fonts/local/BerkeleyMono-SemiBold-Oblique.otf".source = "${fm}/BerkeleyMono-SemiBold-Oblique.otf";
-    "fonts/local/BerkeleyMono-Bold.otf".source = "${fm}/BerkeleyMono-Bold.otf";
-    "fonts/local/BerkeleyMono-Bold-Oblique.otf".source = "${fm}/BerkeleyMono-Bold-Oblique.otf";
-    "fonts/local/BerkeleyMono-ExtraBold.otf".source = "${fm}/BerkeleyMono-ExtraBold.otf";
-    "fonts/local/BerkeleyMono-ExtraBold-Oblique.otf".source =
-      "${fm}/BerkeleyMono-ExtraBold-Oblique.otf";
-    "fonts/local/BerkeleyMono-Black.otf".source = "${fm}/BerkeleyMono-Black.otf";
-    "fonts/local/BerkeleyMono-Black-Oblique.otf".source = "${fm}/BerkeleyMono-Black-Oblique.otf";
-  };
+  fontEtc = lib.optionalAttrs (builtins.pathExists fm) (
+    builtins.listToAttrs (map (name: {
+      name = "fonts/local/${name}";
+      value.source = "${fm}/${name}";
+    }) fonts.berkeleyMonoFiles)
+  );
 in
 {
   imports = [

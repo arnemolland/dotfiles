@@ -5,12 +5,6 @@
   ...
 }:
 
-let
-  # Upstream OPA tests fail; disable checks for now.
-  customOpa = pkgs.open-policy-agent.overrideAttrs (_: {
-    doCheck = false;
-  });
-in
 {
   xdg.enable = true;
 
@@ -30,7 +24,7 @@ in
     ];
 
     packages = [
-      customOpa
+      pkgs.open-policy-agent
       pkgs.nixd
       pkgs.nil
       pkgs.flyctl
@@ -123,41 +117,6 @@ in
       '')
     ];
 
-    # Optional Berkeley Mono on macOS: place .otf files at
-    # ~/.local/share/fonts/berkeley-mono/ (keep out of git if you sync). This lets
-    # fontconfig/Ghostty use them directly.
-    file =
-      let
-        fm = "${config.home.homeDirectory}/.local/share/fonts/berkeley-mono";
-        mk = name: {
-          name = ".local/share/fonts/berkeley-mono/${name}";
-          value.source = config.lib.file.mkOutOfStoreSymlink "${fm}/${name}";
-        };
-      in
-      builtins.listToAttrs (
-        map mk [
-          "BerkeleyMono-Thin.otf"
-          "BerkeleyMono-Thin-Oblique.otf"
-          "BerkeleyMono-ExtraLight.otf"
-          "BerkeleyMono-ExtraLight-Oblique.otf"
-          "BerkeleyMono-Light.otf"
-          "BerkeleyMono-Light-Oblique.otf"
-          "BerkeleyMono-SemiLight.otf"
-          "BerkeleyMono-SemiLight-Oblique.otf"
-          "BerkeleyMono-Regular.otf"
-          "BerkeleyMono-Oblique.otf"
-          "BerkeleyMono-Medium.otf"
-          "BerkeleyMono-Medium-Oblique.otf"
-          "BerkeleyMono-SemiBold.otf"
-          "BerkeleyMono-SemiBold-Oblique.otf"
-          "BerkeleyMono-Bold.otf"
-          "BerkeleyMono-Bold-Oblique.otf"
-          "BerkeleyMono-ExtraBold.otf"
-          "BerkeleyMono-ExtraBold-Oblique.otf"
-          "BerkeleyMono-Black.otf"
-          "BerkeleyMono-Black-Oblique.otf"
-        ]
-      );
   };
 
   programs.direnv = {

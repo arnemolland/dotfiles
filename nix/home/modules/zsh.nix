@@ -10,7 +10,7 @@
     enable = true;
     enableCompletion = true;
     autocd = true;
-    # Keep zsh config under XDG without relying on a relative path (deprecated).
+    # Keep zsh config under XDG.
     dotDir = "${config.xdg.configHome}/zsh";
 
     history = {

@@ -53,8 +53,18 @@
     }:
     let
       system = "aarch64-darwin"; # Apple Silicon
-      # system = "x86_64-darwin"; # Intel
       linuxSystem = "x86_64-linux";
+
+      # Shared overlay: custom packages + nixpkgs-unstable as pkgs.unstable
+      mkOverlays = system: [
+        (import ./nix/overlays)
+        (_final: _prev: {
+          unstable = import nixpkgs-unstable {
+            inherit system;
+            config.allowUnfree = true;
+          };
+        })
+      ];
     in
     {
       darwinConfigurations.air = darwin.lib.darwinSystem {
@@ -62,17 +72,9 @@
         specialArgs = { inherit inputs; };
 
         modules = [
-          # Global nixpkgs config & overlays (evaluated once)
           {
             nixpkgs.config.allowUnfree = true;
-            nixpkgs.overlays = [
-              (_final: _prev: {
-                unstable = import nixpkgs-unstable {
-                  inherit system;
-                  config.allowUnfree = true;
-                };
-              })
-            ];
+            nixpkgs.overlays = mkOverlays system;
           }
 
           ./nix/darwin/hosts/air.nix
@@ -94,14 +96,7 @@
       homeConfigurations.codespaces = hm-linux.lib.homeManagerConfiguration {
         pkgs = import nixpkgs-linux {
           system = linuxSystem;
-          overlays = [
-            (_final: _prev: {
-              unstable = import nixpkgs-unstable {
-                system = linuxSystem;
-                config.allowUnfree = true;
-              };
-            })
-          ];
+          overlays = mkOverlays linuxSystem;
         };
         modules = [
           ./nix/home/codespaces.nix
@@ -113,21 +108,9 @@
         specialArgs = { inherit inputs; };
 
         modules = [
-          # Global nixpkgs config & overlays (evaluated once)
           {
-            nixpkgs.config = {
-              allowUnfree = true;
-              permittedInsecurePackages = [ ];
-            };
-            nixpkgs.overlays = [
-              (import ./nix/overlays)
-              (_final: _prev: {
-                unstable = import nixpkgs-unstable {
-                  system = linuxSystem;
-                  config.allowUnfree = true;
-                };
-              })
-            ];
+            nixpkgs.config.allowUnfree = true;
+            nixpkgs.overlays = mkOverlays linuxSystem;
           }
 
           ./nix/nixos/hosts/desktop

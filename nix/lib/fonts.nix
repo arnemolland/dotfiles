@@ -1,0 +1,24 @@
+{
+  berkeleyMonoFiles = [
+    "BerkeleyMono-Thin.otf"
+    "BerkeleyMono-Thin-Oblique.otf"
+    "BerkeleyMono-ExtraLight.otf"
+    "BerkeleyMono-ExtraLight-Oblique.otf"
+    "BerkeleyMono-Light.otf"
+    "BerkeleyMono-Light-Oblique.otf"
+    "BerkeleyMono-SemiLight.otf"
+    "BerkeleyMono-SemiLight-Oblique.otf"
+    "BerkeleyMono-Regular.otf"
+    "BerkeleyMono-Oblique.otf"
+    "BerkeleyMono-Medium.otf"
+    "BerkeleyMono-Medium-Oblique.otf"
+    "BerkeleyMono-SemiBold.otf"
+    "BerkeleyMono-SemiBold-Oblique.otf"
+    "BerkeleyMono-Bold.otf"
+    "BerkeleyMono-Bold-Oblique.otf"
+    "BerkeleyMono-ExtraBold.otf"
+    "BerkeleyMono-ExtraBold-Oblique.otf"
+    "BerkeleyMono-Black.otf"
+    "BerkeleyMono-Black-Oblique.otf"
+  ];
+}
