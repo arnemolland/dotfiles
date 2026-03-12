@@ -69,6 +69,7 @@
     dbpro
     opencode-desktop
     opencode
+    openfang
     unstable.ollama
     unstable.ollama-cuda
     android-tools
