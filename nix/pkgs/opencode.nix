@@ -14,7 +14,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://github.com/anomalyco/opencode/releases/download/v${version}/opencode-linux-x64.tar.gz";
-    sha256 = "03ijbwq72v3vc3z5i8w70wdn41pl915dl7i6g6dmr4sf8r31kc3q";
+    hash = "sha256-eLAZRkZOk1ybeSYe2kpI9AZiGweHo1j+YHtscTBfMg4=";
   };
 
   nativeBuildInputs = [ autoPatchelfHook ];

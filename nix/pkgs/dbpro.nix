@@ -6,10 +6,10 @@
 
 let
   pname = "dbpro";
-  version = "1.7.1";
+  version = "1.8.2";
   src = fetchurl {
     url = "https://releases.dbpro.app/linux-x64/DB%20Pro-${version}-x86_64.AppImage";
-    sha256 = "1mck3ncm43k119qwwib7haar3simwmkwkg3dvbfyqrnm883l0acp";
+    hash = "sha256-GFgyffqBhdOTBmEmDNxu2cQ61nbfMkcOnaDsmeklM8M=";
     name = "dbpro-${version}.AppImage";
   };
   appimage = appimageTools.extractType2 {
