@@ -26,6 +26,20 @@ let
       jq
     ];
 
+    # Allow the runner to talk to the system podman socket so
+    # container-based Actions (docker://) work.
+    serviceOverrides = {
+      SupplementaryGroups = [ "podman" ];
+    };
+    extraEnvironment = {
+      DOCKER_HOST = "unix:///run/podman/podman.sock";
+      # Testcontainers support: Ryuk (cleanup sidecar) is unreliable
+      # with Podman — disable it and let ephemeral runner cleanup handle it.
+      TESTCONTAINERS_RYUK_DISABLED = "true";
+      # Tell Testcontainers the real socket path for container-internal mounts.
+      TESTCONTAINERS_DOCKER_SOCKET_OVERRIDE = "/run/podman/podman.sock";
+    };
+
     ephemeral = true;
   };
 in
