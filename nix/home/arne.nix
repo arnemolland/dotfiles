@@ -8,6 +8,7 @@
     ./modules/tmux.nix
     ./modules/neovim.nix
     ./modules/ghostty.nix
+    ./modules/openchamber.nix
     ./modules/openfang.nix
     ./modules/plasma.nix
   ];

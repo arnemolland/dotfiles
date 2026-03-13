@@ -2,6 +2,7 @@ final: prev: {
   # Custom packages
   dbpro = final.callPackage ../pkgs/dbpro.nix { };
   opencode = final.callPackage ../pkgs/opencode.nix { };
+  openchamber-web = final.callPackage ../pkgs/openchamber-web { };
   opencode-desktop = final.callPackage ../pkgs/opencode-desktop.nix { };
   openfang = final.callPackage ../pkgs/openfang.nix { };
 
