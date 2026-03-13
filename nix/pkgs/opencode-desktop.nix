@@ -1,114 +1,181 @@
 {
   lib,
-  stdenv,
+  stdenvNoCC,
   fetchurl,
-  dpkg,
-  autoPatchelfHook,
+  bintools,
+  patchelf,
   makeWrapper,
+  wrapGAppsHook3,
+  webkitgtk_4_1,
   gtk3,
   glib,
-  nss,
-  nspr,
-  atk,
-  cups,
-  dbus,
-  libdrm,
-  expat,
-  libxcb,
-  libxkbcommon,
-  xorg,
-  mesa,
-  udev,
-  alsa-lib,
-  webkitgtk_4_1,
+  cairo,
+  gdk-pixbuf,
   libsoup_3,
+  openssl,
 }:
-
 let
   pname = "opencode-desktop";
   version = "1.2.15";
-in
-stdenv.mkDerivation {
-  inherit pname version;
 
-  src = fetchurl {
-    url = "https://github.com/anomalyco/opencode/releases/download/v${version}/opencode-desktop-linux-amd64.deb";
-    hash = "sha256-TJmFT+ZUtnb3O7LG2xrJJKJBt+VNkTs4jk45j8mnHPE=";
+  sources = {
+    x86_64-linux = fetchurl {
+      url = "https://github.com/anomalyco/opencode/releases/download/v${version}/opencode-desktop-linux-amd64.deb";
+      hash = "sha256-TJmFT+ZUtnb3O7LG2xrJJKJBt+VNkTs4jk45j8mnHPE=";
+    };
+    aarch64-linux = fetchurl {
+      url = "https://github.com/anomalyco/opencode/releases/download/v${version}/opencode-desktop-linux-arm64.deb";
+      hash = "sha256-wlEfUjNASbo0xkC4gfwTwmWghkv1rEahKvOLhWJUL2c=";
+    };
+    aarch64-darwin = fetchurl {
+      url = "https://github.com/anomalyco/opencode/releases/download/v${version}/opencode-desktop-darwin-aarch64.app.tar.gz";
+      hash = "sha256-dWM7gFBeO7S9quefSsK7fElIn2ewTFeIGAXh2Hvm1dA=";
+    };
   };
 
-  nativeBuildInputs = [
-    dpkg
-    autoPatchelfHook
-    makeWrapper
-  ];
-
-  buildInputs = [
+  # Shared library search path for the Tauri (WebKitGTK) desktop binary.
+  rpath = lib.makeLibraryPath [
+    webkitgtk_4_1
     gtk3
     glib
-    nss
-    nspr
-    atk
-    cups
-    dbus
-    libdrm
-    expat
-    libxcb
-    libxkbcommon
-    xorg.libX11
-    xorg.libXcomposite
-    xorg.libXdamage
-    xorg.libXext
-    xorg.libXfixes
-    xorg.libXrandr
-    xorg.libxshmfence
-    mesa
-    udev
-    alsa-lib
-    webkitgtk_4_1
+    cairo
+    gdk-pixbuf
     libsoup_3
+    openssl
   ];
 
-  unpackPhase = ''
-    dpkg-deb -x $src .
-  '';
+  # Linux package: unpack .deb and patch ELF binaries.
+  linux = stdenvNoCC.mkDerivation {
+    inherit
+      pname
+      version
+      meta
+      ;
 
-  installPhase = ''
-    mkdir -p $out/bin $out/share
+    src = sources.${stdenvNoCC.hostPlatform.system};
 
-    cp -r usr/share/. $out/share/
+    # Stripping and autoPatchelf are both disabled because opencode-cli is a
+    # Bun-compiled binary with JavaScript appended after the ELF sections.
+    # strip truncates the payload; patchelf section rewriting can corrupt it.
+    # We patch only the Tauri binary (OpenCode) manually in postFixup.
+    dontStrip = true;
+    dontPatchELF = true;
 
-    # Binaries ship directly in usr/bin
-    install -m 755 usr/bin/OpenCode $out/bin/.OpenCode-wrapped-real
-    makeWrapper $out/bin/.OpenCode-wrapped-real $out/bin/opencode-desktop \
-      --add-flags "--no-sandbox"
+    nativeBuildInputs = [
+      patchelf
+      makeWrapper
+      wrapGAppsHook3
+      bintools
+    ];
 
-    # Two code paths in the app both need to find opencode-cli:
-    #
-    # 1. Tauri native sidecar mechanism: looks for
-    #    <exe_dir>/sidecars/opencode-cli-x86_64-unknown-linux-gnu
-    #    (Tauri appends the target triple)
-    #
-    # 2. opencode_lib::cli shell path: invokes `zsh -l -c <exe_dir>/opencode-cli`
-    #    (plain name, no sidecars/ subdirectory)
-    #
-    # Both paths are relative to the real executable ($out/bin/.OpenCode-wrapped-real).
-    mkdir -p $out/bin/sidecars
-    install -m 755 usr/bin/opencode-cli \
-      $out/bin/sidecars/opencode-cli-x86_64-unknown-linux-gnu
-    # Plain sibling for the shell-based launch path
-    install -m 755 usr/bin/opencode-cli $out/bin/opencode-cli
+    buildInputs = [
+      gtk3
+      glib
+    ];
 
-    # Fix the .desktop Exec entry to use our wrapper
-    substituteInPlace $out/share/applications/OpenCode.desktop \
-      --replace-fail "Exec=OpenCode" "Exec=opencode-desktop"
-  '';
+    unpackPhase = ''
+      runHook preUnpack
+      ar x "$src"
+      tar xzf data.tar.gz
+      runHook postUnpack
+    '';
 
-  meta = with lib; {
-    description = "The open source AI coding agent desktop app";
+    installPhase = ''
+      runHook preInstall
+
+      mkdir -p "$out/bin"
+      mkdir -p "$out/share"
+
+      # Install the main Tauri desktop binary.
+      install -Dm755 usr/bin/OpenCode "$out/lib/opencode-desktop/OpenCode"
+
+      # Install the CLI companion verbatim; it is a Bun-compiled binary with
+      # JavaScript appended after the ELF data. It must not be stripped or
+      # patched, so we copy it as-is and only patch the Tauri binary below.
+      cp usr/bin/opencode-cli "$out/lib/opencode-desktop/opencode-cli"
+      chmod 755 "$out/lib/opencode-desktop/opencode-cli"
+
+      # Desktop integration files shipped in the .deb.
+      cp -r usr/share/icons "$out/share/"
+      cp -r usr/share/applications "$out/share/"
+      cp -r usr/share/metainfo "$out/share/" 2>/dev/null || true
+
+      # Fix the desktop file to point at our wrapper.
+      substituteInPlace "$out/share/applications/OpenCode.desktop" \
+        --replace-fail "Exec=OpenCode" "Exec=opencode-desktop"
+
+      # Wrapper for the GUI binary with Wayland support.
+      makeWrapper "$out/lib/opencode-desktop/OpenCode" "$out/bin/opencode-desktop" \
+        --add-flags "''${NIXOS_OZONE_WL:+''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto}}"
+
+      # Expose the CLI as well.
+      ln -s "$out/lib/opencode-desktop/opencode-cli" "$out/bin/opencode-cli"
+
+      runHook postInstall
+    '';
+
+    # Patch the Tauri binary's ELF interpreter and RPATH so it finds
+    # WebKitGTK, GTK3, libsoup and friends at runtime.
+    postFixup = ''
+      patchelf \
+        --set-interpreter "$(cat ${bintools}/nix-support/dynamic-linker)" \
+        --set-rpath "${rpath}" \
+        "$out/lib/opencode-desktop/OpenCode"
+    '';
+  };
+
+  # macOS package: unpack the .app.tar.gz archive.
+  darwin = stdenvNoCC.mkDerivation {
+    inherit
+      pname
+      version
+      meta
+      ;
+
+    src = sources.aarch64-darwin;
+
+    dontPatch = true;
+    dontConfigure = true;
+    dontBuild = true;
+    dontFixup = true;
+
+    nativeBuildInputs = [ makeWrapper ];
+
+    sourceRoot = ".";
+
+    installPhase = ''
+      runHook preInstall
+
+      mkdir -p "$out/Applications" "$out/bin"
+      cp -r OpenCode.app "$out/Applications/"
+
+      # Convenience wrapper so the binary is on PATH.
+      makeWrapper "$out/Applications/OpenCode.app/Contents/MacOS/OpenCode" "$out/bin/opencode-desktop"
+
+      # Expose the CLI companion.
+      ln -s "$out/Applications/OpenCode.app/Contents/MacOS/opencode-cli" "$out/bin/opencode-cli"
+
+      runHook postInstall
+    '';
+  };
+
+  meta = {
+    description = "OpenCode desktop client - an open source AI coding agent";
     homepage = "https://opencode.ai";
-    license = licenses.unfree;
-    platforms = [ "x86_64-linux" ];
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    changelog = "https://github.com/anomalyco/opencode/releases/tag/v${version}";
+    license = lib.licenses.mit;
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "aarch64-darwin"
+    ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     mainProgram = "opencode-desktop";
   };
-}
+in
+if stdenvNoCC.hostPlatform.isDarwin then
+  darwin
+else if stdenvNoCC.hostPlatform.isLinux then
+  linux
+else
+  throw "Unsupported platform ${stdenvNoCC.hostPlatform.system}"
