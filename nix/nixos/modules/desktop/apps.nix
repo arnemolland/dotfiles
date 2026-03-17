@@ -14,6 +14,7 @@
     discord
     slack
     obsidian
+    lmstudio
     inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.default
   ];
 }

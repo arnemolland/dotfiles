@@ -19,6 +19,29 @@
       zlib
       openssl
       libgcc
+
+      # Browser runtime deps (Playwright / Chromium / Electron)
+      glib
+      nspr
+      nss
+      gtk3
+      pango
+      cairo
+      atk
+      dbus
+      expat
+      libdrm
+      mesa
+      libxkbcommon
+      cups
+      pkgs."alsa-lib"
+      xorg.libX11
+      xorg.libxcb
+      xorg.libXcomposite
+      xorg.libXdamage
+      xorg.libXext
+      xorg.libXfixes
+      xorg.libXrandr
     ];
   };
 
