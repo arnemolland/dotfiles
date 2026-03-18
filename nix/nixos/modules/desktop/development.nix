@@ -32,16 +32,23 @@
       expat
       libdrm
       mesa
+      libgbm
+      libglvnd
       libxkbcommon
       cups
+      at-spi2-core
+      at-spi2-atk
       pkgs."alsa-lib"
+      xorg.libxshmfence
       xorg.libX11
+      xorg.libXScrnSaver
       xorg.libxcb
       xorg.libXcomposite
       xorg.libXdamage
       xorg.libXext
       xorg.libXfixes
       xorg.libXrandr
+      xorg.libXtst
     ];
   };
 

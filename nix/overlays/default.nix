@@ -1,6 +1,8 @@
 final: prev: {
   # Custom packages
   dbpro = final.callPackage ../pkgs/dbpro.nix { };
+  llmster = final.callPackage ../pkgs/llmster.nix { };
+  lmstudio = final.callPackage ../pkgs/lmstudio.nix { };
   opencode = final.callPackage ../pkgs/opencode.nix { };
   openchamber-web = final.callPackage ../pkgs/openchamber-web { };
   opencode-desktop = final.callPackage ../pkgs/opencode-desktop.nix { };
