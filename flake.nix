@@ -23,6 +23,11 @@
 
     comfyui-nix.url = "github:utensils/comfyui-nix";
 
+    lanzaboote = {
+      url = "github:nix-community/lanzaboote/v1.0.0";
+      inputs.nixpkgs.follows = "nixpkgs-linux";
+    };
+
     sops-nix.url = "github:Mic92/sops-nix";
     sops-nix.inputs.nixpkgs.follows = "nixpkgs-linux";
 
@@ -120,6 +125,7 @@
 
           ./nix/nixos/hosts/desktop
 
+          inputs.lanzaboote.nixosModules.lanzaboote
           inputs.sops-nix.nixosModules.sops
 
           hm-linux.nixosModules.home-manager

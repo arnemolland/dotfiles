@@ -1,4 +1,9 @@
-{ pkgs, config, lib, ... }:
+{
+  pkgs,
+  config,
+  lib,
+  ...
+}:
 
 let
   runnerCount = 2;
@@ -18,6 +23,7 @@ let
 
     extraPackages = with pkgs; [
       docker
+      podman
       nodejs
       git
       coreutils
@@ -29,15 +35,19 @@ let
     # Allow the runner to talk to the system podman socket so
     # container-based Actions (docker://) work.
     serviceOverrides = {
+      # `services:` in GitHub Actions talks to the Docker API endpoint.
+      # With podman docker socket compatibility enabled this endpoint is
+      # exposed on /run/docker.sock and controlled by the podman group.
       SupplementaryGroups = [ "podman" ];
     };
     extraEnvironment = {
-      DOCKER_HOST = "unix:///run/podman/podman.sock";
+      # Use the Docker-compatible socket path expected by most actions.
+      DOCKER_HOST = "unix:///run/docker.sock";
       # Testcontainers support: Ryuk (cleanup sidecar) is unreliable
       # with Podman — disable it and let ephemeral runner cleanup handle it.
       TESTCONTAINERS_RYUK_DISABLED = "true";
       # Tell Testcontainers the real socket path for container-internal mounts.
-      TESTCONTAINERS_DOCKER_SOCKET_OVERRIDE = "/run/podman/podman.sock";
+      TESTCONTAINERS_DOCKER_SOCKET_OVERRIDE = "/run/docker.sock";
     };
 
     ephemeral = true;

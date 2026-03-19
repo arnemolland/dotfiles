@@ -52,22 +52,45 @@ in
     desktopManager.plasma6.enable = true;
   };
 
-  # Bootloader — EFI; LUKS/btrfs in hardware-configuration.nix
+  # Bootloader — EFI with Lanzaboote (Secure Boot)
   boot = {
     loader = {
-      systemd-boot = {
-        enable = true;
-        configurationLimit = 20;
-      };
+      # Lanzaboote replaces systemd-boot as the bootloader.
+      systemd-boot.enable = lib.mkForce false;
       efi.canTouchEfiVariables = true;
     };
-    # Ryzen 9 power/perf
+    lanzaboote = {
+      enable = true;
+      pkiBundle = "/var/lib/sbctl";
+    };
+
+    # Plymouth boot splash
+    plymouth = {
+      enable = true;
+      theme = "lone";
+      themePackages = [
+        (pkgs.adi1090x-plymouth-themes.override {
+          selected_themes = [ "lone" ];
+        })
+      ];
+    };
+
+    # Silent boot — suppress firmware/kernel noise for a clean splash
+    consoleLogLevel = 3;
+    initrd.verbose = false;
+    initrd.systemd.enable = true;
     kernelParams = [
       "amd_pstate=active"
       "nvidia-drm.modeset=1"
       "nvidia-drm.fbdev=1"
+      "quiet"
+      "udev.log_level=3"
+      "systemd.show_status=auto"
     ];
   };
+
+  # For debugging and troubleshooting Secure Boot
+  environment.systemPackages = [ pkgs.sbctl ];
 
   # NVIDIA RTX 4080
   hardware = {
