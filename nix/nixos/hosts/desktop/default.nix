@@ -10,10 +10,12 @@ let
   fonts = import ../../../lib/fonts.nix;
   fm = "/etc/nixos/private/fonts/berkeley-mono";
   fontEtc = lib.optionalAttrs (builtins.pathExists fm) (
-    builtins.listToAttrs (map (name: {
-      name = "fonts/local/${name}";
-      value.source = "${fm}/${name}";
-    }) fonts.berkeleyMonoFiles)
+    builtins.listToAttrs (
+      map (name: {
+        name = "fonts/local/${name}";
+        value.source = "${fm}/${name}";
+      }) fonts.berkeleyMonoFiles
+    )
   );
 in
 {
@@ -47,7 +49,7 @@ in
     power-profiles-daemon.enable = true;
     displayManager.sddm = {
       enable = true;
-      wayland.enable = false;
+      wayland.enable = true;
     };
     desktopManager.plasma6.enable = true;
   };
@@ -83,6 +85,7 @@ in
       "amd_pstate=active"
       "nvidia-drm.modeset=1"
       "nvidia-drm.fbdev=1"
+      "video=DPMS:off"
       "quiet"
       "udev.log_level=3"
       "systemd.show_status=auto"
@@ -126,7 +129,7 @@ in
   # Prevent KWin from bypassing the compositor for fullscreen windows
   # (direct scanout causes a black screen flash during mode renegotiation
   # on NVIDIA).  Negligible perf cost on RTX 4080.
-  # VRR is set to "Always" via home-manager (plasma.nix) so the display
+  # VRR is set to "Never" via home-manager (plasma.nix) so the display
   # never mode-switches between fixed and variable refresh.
   environment.sessionVariables.KWIN_DRM_NO_DIRECT_SCANOUT = "1";
 
