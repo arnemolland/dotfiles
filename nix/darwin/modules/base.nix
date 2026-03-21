@@ -16,6 +16,7 @@
     gnugrep
     harfbuzz
     gnumake
+    maestro
     socat
     s3cmd
     tmux
