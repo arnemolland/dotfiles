@@ -41,7 +41,6 @@ stdenv.mkDerivation {
     mkdir -p $out/lib/llmster $out/bin
     cp -a llmster .bundle $out/lib/llmster/
 
-    # Only expose llmster; lms CLI is provided by the lmstudio package.
     ln -s $out/lib/llmster/llmster $out/bin/llmster
 
     runHook postInstall
