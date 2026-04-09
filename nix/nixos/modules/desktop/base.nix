@@ -44,6 +44,7 @@
   users.users.arne = {
     isNormalUser = true;
     description = "Arne";
+    linger = true;
     extraGroups = [
       "wheel"
       "networkmanager"
@@ -89,5 +90,8 @@
     zip
     pciutils
     usbutils
+    ncdu
+    htop
+    btop
   ];
 }

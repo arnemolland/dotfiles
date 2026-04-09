@@ -97,11 +97,10 @@
 
     # Dev tools & AI
     dbpro
+    google-cloud-sdk
     opencode-desktop
     opencode
     openfang
-    unstable.ollama
-    unstable.ollama-cuda
     android-tools
     android-studio
   ];

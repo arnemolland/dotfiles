@@ -14,17 +14,17 @@ lib.mkIf pkgs.stdenv.isLinux {
     Unit = {
       Description = "OpenChamber Web - GUI for OpenCode AI agent";
       Documentation = "https://github.com/btriapitsyn/openchamber";
-      After = [ "graphical-session.target" ];
-      PartOf = [ "graphical-session.target" ];
+      After = [ "default.target" ];
+      PartOf = [ "default.target" ];
     };
     Service = {
       Type = "simple";
-      ExecStart = "${lib.getExe pkgs.openchamber-web} --port ${toString port}";
+      ExecStart = "${lib.getExe pkgs.openchamber-web} serve --foreground --host 0.0.0.0 --port ${toString port}";
       Restart = "on-failure";
       RestartSec = 5;
     };
     Install = {
-      WantedBy = [ "graphical-session.target" ];
+      WantedBy = [ "default.target" ];
     };
   };
 }
