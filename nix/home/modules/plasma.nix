@@ -14,4 +14,13 @@ lib.mkIf pkgs.stdenv.isLinux {
     run ${pkgs.kdePackages.kconfig}/bin/kwriteconfig6 \
       --file kwinrc --group Compositing --key VrrPolicy 0
   '';
+
+  # Ensure the Breeze splash screen is active so the SDDM-to-desktop
+  # transition is covered by a smooth animation instead of a black gap.
+  home.activation.ksplash = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    run ${pkgs.kdePackages.kconfig}/bin/kwriteconfig6 \
+      --file ksplashrc --group KSplash --key Engine KSplashQML
+    run ${pkgs.kdePackages.kconfig}/bin/kwriteconfig6 \
+      --file ksplashrc --group KSplash --key Theme org.kde.breeze.desktop
+  '';
 }

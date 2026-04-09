@@ -31,6 +31,11 @@
     sops-nix.url = "github:Mic92/sops-nix";
     sops-nix.inputs.nixpkgs.follows = "nixpkgs-linux";
 
+    silentSDDM = {
+      url = "github:uiriansan/SilentSDDM";
+      inputs.nixpkgs.follows = "nixpkgs-linux";
+    };
+
     nix-homebrew.url = "github:zhaofengli/nix-homebrew";
 
     # Pinned taps
@@ -127,6 +132,7 @@
 
           inputs.lanzaboote.nixosModules.lanzaboote
           inputs.sops-nix.nixosModules.sops
+          inputs.silentSDDM.nixosModules.default
 
           hm-linux.nixosModules.home-manager
           {

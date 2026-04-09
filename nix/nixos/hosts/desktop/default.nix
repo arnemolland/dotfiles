@@ -17,6 +17,8 @@ let
       }) fonts.berkeleyMonoFiles
     )
   );
+
+  wallpaper = ../../../../wallpapers/big-sur-night.jpg;
 in
 {
   imports = [
@@ -38,24 +40,60 @@ in
 
   home-manager.backupFileExtension = "bak";
 
-  # X server (Wayland primary via SDDM/Plasma 6, X enabled for compat)
-  # NVIDIA RTX 4080
-  # KDE Plasma (Wayland) with SDDM
+  # KDE Plasma (Wayland) with SDDM + SilentSDDM theme
   services = {
     xserver = {
       enable = true;
       videoDrivers = [ "nvidia" ];
     };
-    power-profiles-daemon.enable = true;
+    # SilentSDDM sets wayland.enable = !xserver.enable, which wrongly
+    # falls back to X11 here.  Force Wayland so the SDDM greeter and
+    # KWin share the same display server — no black-screen gap.
     displayManager.sddm = {
-      enable = true;
-      wayland.enable = true;
+      wayland.enable = lib.mkForce true;
+      # HiDPI scaling for the SDDM greeter (4K / 3840x2160)
+      settings = {
+        Wayland.EnableHiDPI = true;
+        X11.EnableHiDPI = true;
+        # Merge SilentSDDM's required QML import path with HiDPI env vars.
+        # SilentSDDM hardcodes GreeterEnvironment, so mkForce is needed.
+        General.GreeterEnvironment = lib.mkForce (builtins.concatStringsSep "," [
+          "QML2_IMPORT_PATH=${config.programs.silentSDDM.package'}/share/sddm/themes/silent/components/"
+          "QT_IM_MODULE=qtvirtualkeyboard"
+          "QT_SCREEN_SCALE_FACTORS=2"
+          "QT_FONT_DPI=192"
+        ]);
+      };
     };
+    power-profiles-daemon.enable = true;
     desktopManager.plasma6.enable = true;
+  };
+
+  # SilentSDDM login screen with Big Sur wallpaper
+  programs.silentSDDM = {
+    enable = true;
+    theme = "default";
+    backgrounds.big-sur = wallpaper;
+    settings = {
+      "LoginScreen" = {
+        background = "big-sur-night.jpg";
+        blur = 0;
+        brightness = 0.0;
+        saturation = 0.0;
+      };
+      "LockScreen" = {
+        background = "big-sur-night.jpg";
+        blur = 32;
+        brightness = 0.0;
+        saturation = 0.0;
+      };
+    };
   };
 
   # Bootloader — EFI with Lanzaboote (Secure Boot)
   boot = {
+    # Keep NVIDIA on the newest packaged branch from nixpkgs-unstable.
+    kernelPackages = pkgs.unstable.linuxPackages;
     loader = {
       # Lanzaboote replaces systemd-boot as the bootloader.
       systemd-boot.enable = lib.mkForce false;
@@ -69,10 +107,10 @@ in
     # Plymouth boot splash
     plymouth = {
       enable = true;
-      theme = "lone";
+      theme = "sliced";
       themePackages = [
         (pkgs.adi1090x-plymouth-themes.override {
-          selected_themes = [ "lone" ];
+          selected_themes = [ "sliced" ];
         })
       ];
     };
@@ -81,6 +119,13 @@ in
     consoleLogLevel = 3;
     initrd.verbose = false;
     initrd.systemd.enable = true;
+    # Load NVIDIA DRM in initrd so Plymouth runs at native resolution/refresh
+    initrd.kernelModules = [
+      "nvidia"
+      "nvidia_modeset"
+      "nvidia_uvm"
+      "nvidia_drm"
+    ];
     kernelParams = [
       "amd_pstate=active"
       "nvidia-drm.modeset=1"
