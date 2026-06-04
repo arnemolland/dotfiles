@@ -82,31 +82,32 @@
       ];
     in
     {
-      darwinConfigurations.air = darwin.lib.darwinSystem {
-        inherit system;
-        specialArgs = { inherit inputs; };
+       darwinConfigurations.air = darwin.lib.darwinSystem {
+         inherit system;
+         specialArgs = { inherit inputs; };
 
-        modules = [
-          {
-            nixpkgs.config.allowUnfree = true;
-            nixpkgs.overlays = mkOverlays system;
-          }
+         modules = [
+           {
+             nixpkgs.config.allowUnfree = true;
+             nixpkgs.overlays = mkOverlays system;
+             nix.enable = false;
+           }
 
-          ./nix/darwin/hosts/air.nix
+           ./nix/darwin/hosts/air.nix
 
-          hm-darwin.darwinModules.home-manager
-          {
-            home-manager = {
-              useGlobalPkgs = true;
-              useUserPackages = true;
-              extraSpecialArgs = { inherit inputs; };
-              users.arne = import ./nix/home/arne.nix;
-            };
-          }
+           hm-darwin.darwinModules.home-manager
+           {
+             home-manager = {
+               useGlobalPkgs = true;
+               useUserPackages = true;
+               extraSpecialArgs = { inherit inputs; };
+               users.arne = import ./nix/home/arne.nix;
+             };
+           }
 
-          inputs.nix-homebrew.darwinModules.nix-homebrew
-        ];
-      };
+           inputs.nix-homebrew.darwinModules.nix-homebrew
+         ];
+       };
 
       homeConfigurations.codespaces = hm-linux.lib.homeManagerConfiguration {
         pkgs = import nixpkgs-linux {

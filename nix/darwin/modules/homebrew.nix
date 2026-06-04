@@ -43,6 +43,7 @@ _:
       "vlc"
       "chatgpt"
       "tableplus"
+      "notion"
     ];
 
     onActivation = {

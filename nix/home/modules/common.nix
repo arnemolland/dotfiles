@@ -29,24 +29,25 @@
       pkgs.nil
       pkgs.flyctl
     ]
-    ++ (with pkgs; [
-      bat
-      eza
-      coreutils
-      fzf
-      ripgrep
-      fd
-      gopls
-      dart
-      rust-analyzer
-      zls
-      sqls
-      dockerfile-language-server
-      lua-language-server
-      nodePackages.typescript-language-server
-      pyright
-      unstable.bun
-    ])
+     ++ (with pkgs; [
+       bat
+       eza
+       coreutils
+       fzf
+       ripgrep
+       fd
+       lazygit
+       gopls
+       dart
+       rust-analyzer
+       zls
+       sqls
+       dockerfile-language-server
+       lua-language-server
+       nodePackages.typescript-language-server
+       pyright
+       unstable.bun
+     ])
     ++ lib.optionals pkgs.stdenv.isLinux (
       with pkgs;
       [
