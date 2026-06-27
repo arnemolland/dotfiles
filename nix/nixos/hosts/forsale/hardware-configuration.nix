@@ -1,0 +1,1 @@
+../desktop/hardware-configuration.nix

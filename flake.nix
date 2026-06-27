@@ -146,5 +146,25 @@
           }
         ];
       };
+
+      # De-personalised baseline of the desktop hardware for handover/sale.
+      # Reuses the hardware scan and the non-personal desktop modules, but
+      # carries no user identity, secrets, tailscale, or github-runner.
+      # Secure Boot (lanzaboote) is kept; the new owner enrols their own keys.
+      nixosConfigurations.forsale = nixpkgs-linux.lib.nixosSystem {
+        system = linuxSystem;
+        specialArgs = { inherit inputs; };
+
+        modules = [
+          {
+            nixpkgs.config.allowUnfree = true;
+            nixpkgs.overlays = mkOverlays linuxSystem;
+          }
+
+          ./nix/nixos/hosts/forsale
+
+          inputs.lanzaboote.nixosModules.lanzaboote
+        ];
+      };
     };
 }
