@@ -28,17 +28,100 @@ in
     ../../modules/desktop/development.nix
     ../../modules/desktop/apps.nix
     ../../modules/desktop/gaming.nix
+    ../../modules/desktop/openlinkhub.nix
     ../../modules/desktop/github-runner.nix
     # Machine-specific hardware
     ./hardware-configuration.nix
-
-    # ComfyUI
-    inputs.comfyui-nix.nixosModules.default
   ];
 
   networking.hostName = "desktop";
 
   home-manager.backupFileExtension = "bak";
+
+  systemd.tmpfiles.rules = [
+    "d /mnt/extendo 0755 root root -"
+    "d /mnt/scratch 0755 root root -"
+    # Bind target for /run/github-runner — see systemd.mounts below.
+    "d /mnt/scratch/github-runner-run 0755 root root -"
+  ];
+
+  # Secondary NVMe (ext4) used to offload high-churn root-owned state
+  # (github-runner work dirs, podman storage) from the main /nix/store disk.
+  fileSystems."/mnt/scratch" = {
+    device = "/dev/disk/by-uuid/3c2a5648-8c2f-4175-92ef-0ef6a1f1c468";
+    fsType = "ext4";
+    options = [
+      "defaults"
+      "nofail"
+    ];
+  };
+
+  systemd.mounts = [
+    {
+      what = "/dev/disk/by-uuid/AAC49F80C49F4E07";
+      where = "/mnt/extendo";
+      type = "ntfs3";
+      options = "uid=1000,gid=100,umask=022,force,nofail";
+      unitConfig.ConditionPathExists = "/dev/disk/by-uuid/AAC49F80C49F4E07";
+    }
+    # Move github-runner DynamicUser state off the root disk. The runners'
+    # ephemeral work trees thrash /var/lib/private/github-runner — keep it
+    # on the secondary NVMe.
+    {
+      what = "/mnt/scratch/github-runner";
+      where = "/var/lib/private/github-runner";
+      type = "none";
+      options = "bind";
+      requires = [ "mnt-scratch.mount" ];
+      after = [ "mnt-scratch.mount" ];
+      wantedBy = [ "multi-user.target" ];
+    }
+    # Podman image/layer storage lives here and balloons fast under CI load.
+    # Bind the whole containers tree onto scratch so the root disk stays slim.
+    {
+      what = "/mnt/scratch/containers";
+      where = "/var/lib/containers";
+      type = "none";
+      options = "bind";
+      requires = [ "mnt-scratch.mount" ];
+      after = [ "mnt-scratch.mount" ];
+      before = [
+        "podman.service"
+        "podman.socket"
+      ];
+      wantedBy = [ "multi-user.target" ];
+    }
+    # The GitHub runner module uses RuntimeDirectory=github-runner/<name>,
+    # which lands work trees, _temp, _tool and the cloned repo on the /run
+    # tmpfs (16 G, RAM-backed). Four concurrent runners cloning monorepos
+    # there pushes RAM hard. Bind /run/github-runner onto the scratch SSD
+    # so the heavy I/O lands on disk while the runner state files
+    # (credentials, .runner) keep their existing scratch bind via
+    # /var/lib/private/github-runner above.
+    {
+      what = "/mnt/scratch/github-runner-run";
+      where = "/run/github-runner";
+      type = "none";
+      options = "bind";
+      requires = [ "mnt-scratch.mount" ];
+      after = [ "mnt-scratch.mount" ];
+      before = [
+        "github-runner-frifor-next-1.service"
+        "github-runner-frifor-next-2.service"
+        "github-runner-frifor-next-3.service"
+        "github-runner-frifor-next-4.service"
+      ];
+      wantedBy = [ "multi-user.target" ];
+    }
+  ];
+
+  systemd.automounts = [
+    {
+      where = "/mnt/extendo";
+      wantedBy = [ "multi-user.target" ];
+      automountConfig.TimeoutIdleSec = "10min";
+    }
+  ];
 
   # KDE Plasma (Wayland) with SDDM + SilentSDDM theme
   services = {
@@ -95,8 +178,13 @@ in
     # Keep NVIDIA on the newest packaged branch from nixpkgs-unstable.
     kernelPackages = pkgs.unstable.linuxPackages;
     loader = {
-      # Lanzaboote replaces systemd-boot as the bootloader.
-      systemd-boot.enable = lib.mkForce false;
+      # Lanzaboote replaces systemd-boot as the bootloader, but inherits
+      # configurationLimit from this option — cap kept generations so /boot
+      # and /nix don't accumulate every rebuild forever.
+      systemd-boot = {
+        enable = lib.mkForce false;
+        configurationLimit = 10;
+      };
       efi.canTouchEfiVariables = true;
     };
     lanzaboote = {
@@ -162,21 +250,6 @@ in
 
   # Private Berkeley Mono font mapping
   environment.etc = fontEtc;
-
-  # ComfyUI service (NVIDIA RTX 4080)
-  services.comfyui = {
-    enable = true;
-    package = inputs.comfyui-nix.packages.${pkgs.stdenv.hostPlatform.system}.cuda;
-    enableManager = true;
-    port = 8188;
-  };
-
-  # Prevent KWin from bypassing the compositor for fullscreen windows
-  # (direct scanout causes a black screen flash during mode renegotiation
-  # on NVIDIA).  Negligible perf cost on RTX 4080.
-  # VRR is set to "Never" via home-manager (plasma.nix) so the display
-  # never mode-switches between fixed and variable refresh.
-  environment.sessionVariables.KWIN_DRM_NO_DIRECT_SCANOUT = "1";
 
   system.stateVersion = "25.11";
 }

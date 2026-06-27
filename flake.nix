@@ -21,7 +21,7 @@
       inputs.nixpkgs.follows = "nixpkgs-linux";
     };
 
-    comfyui-nix.url = "github:utensils/comfyui-nix";
+    
 
     lanzaboote = {
       url = "github:nix-community/lanzaboote/v1.0.0";

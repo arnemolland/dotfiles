@@ -7,14 +7,14 @@
 
 let
   pname = "llmster";
-  version = "0.0.6-1";
+  version = "0.0.10-1";
 in
 stdenv.mkDerivation {
   inherit pname version;
 
   src = fetchurl {
     url = "https://llmster.lmstudio.ai/download/${version}-linux-x64.full.tar.gz";
-    hash = "sha256-/EyUu/ZGABoG5QHVUmWzI7gOF6exzRweYcCoEevHGRs=";
+    hash = "sha256-d7z1iwcZOW590Vr/245WR00+D5okGHUr58TBcUwc6bw=";
   };
 
   nativeBuildInputs = [ autoPatchelfHook ];
@@ -42,6 +42,7 @@ stdenv.mkDerivation {
     cp -a llmster .bundle $out/lib/llmster/
 
     ln -s $out/lib/llmster/llmster $out/bin/llmster
+    ln -s $out/lib/llmster/.bundle/lms $out/bin/lms
 
     runHook postInstall
   '';

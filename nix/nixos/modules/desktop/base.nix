@@ -10,24 +10,34 @@
         "nix-command"
         "flakes"
       ];
+      auto-optimise-store = true;
+      min-free = 5 * 1024 * 1024 * 1024;
+      max-free = 20 * 1024 * 1024 * 1024;
       download-buffer-size = 4294967296;
       substituters = [
         "https://cache.nixos.org"
-        "https://comfyui.cachix.org"
         "https://nix-community.cachix.org"
       ];
       trusted-public-keys = [
         "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
-        "comfyui.cachix.org-1:33mf9VzoIjzVbp0zwj+fT51HG0y31ZTK3nzYZAX0rec="
         "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
       ];
     };
     gc = {
       automatic = true;
-      dates = "weekly";
-      options = "--delete-older-than 30d";
+      dates = "daily";
+      options = "--delete-older-than 14d";
     };
+    optimise.automatic = true;
   };
+
+  # Cap journald — uncapped logs were a 4 G chunk of the desktop / partition.
+  services.journald.extraConfig = ''
+    SystemMaxUse=1G
+    SystemKeepFree=2G
+  '';
+
+  boot.tmp.cleanOnBoot = true;
 
   time.timeZone = "Europe/Oslo";
   i18n.defaultLocale = "en_US.UTF-8";

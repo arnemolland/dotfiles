@@ -6,7 +6,23 @@
 }:
 
 let
-  runnerCount = 2;
+  runnerCount = 4;
+
+  # Testcontainers' Ryuk sidecar is disabled below (unreliable with Podman),
+  # so nothing else reaps the containers/volumes it leaves behind. The
+  # runner invokes this script via ACTIONS_RUNNER_HOOK_JOB_COMPLETED after
+  # every job to sweep orphans. Images are dangling-pruned only (not -a)
+  # to keep the base-image cache warm for subsequent jobs.
+  # Name must end in .sh — the GitHub runner validates the hook path's
+  # extension and rejects bare store paths.
+  jobCompletedHook = pkgs.writeShellScript "gh-runner-job-cleanup.sh" ''
+    set -u
+    export DOCKER_HOST="unix:///run/docker.sock"
+    ${pkgs.docker}/bin/docker container prune -f >/dev/null 2>&1 || true
+    ${pkgs.docker}/bin/docker volume prune -f >/dev/null 2>&1 || true
+    ${pkgs.docker}/bin/docker image prune -f >/dev/null 2>&1 || true
+    exit 0
+  '';
 
   # Shared configuration for all runner instances
   runnerConfig = id: {
@@ -43,11 +59,14 @@ let
     extraEnvironment = {
       # Use the Docker-compatible socket path expected by most actions.
       DOCKER_HOST = "unix:///run/docker.sock";
-      # Testcontainers support: Ryuk (cleanup sidecar) is unreliable
-      # with Podman — disable it and let ephemeral runner cleanup handle it.
+      # Testcontainers support: Ryuk (cleanup sidecar) is unreliable with
+      # Podman — disable it. Cleanup is instead done by jobCompletedHook,
+      # wired in via ACTIONS_RUNNER_HOOK_JOB_COMPLETED below.
       TESTCONTAINERS_RYUK_DISABLED = "true";
       # Tell Testcontainers the real socket path for container-internal mounts.
       TESTCONTAINERS_DOCKER_SOCKET_OVERRIDE = "/run/docker.sock";
+      # GitHub runner fires this after every job; reaps testcontainers orphans.
+      ACTIONS_RUNNER_HOOK_JOB_COMPLETED = "${jobCompletedHook}";
     };
 
     ephemeral = true;
@@ -75,4 +94,29 @@ in
       value = runnerConfig (id + 1);
     }) runnerCount
   );
+
+  # Safety net: if a job is killed before its completion hook runs,
+  # orphans would otherwise accumulate forever. This timer sweeps weekly.
+  # Scoped narrower than the per-job hook: image prune is dangling-only
+  # to preserve the cache; volumes/containers not attached to a live
+  # container are safe to remove even mid-job.
+  systemd.services.podman-gc = {
+    description = "Periodic podman GC (CI leftovers safety net)";
+    serviceConfig.Type = "oneshot";
+    path = [ config.virtualisation.podman.package ];
+    script = ''
+      podman container prune -f || true
+      podman volume prune -f || true
+      podman image prune -f || true
+    '';
+  };
+
+  systemd.timers.podman-gc = {
+    wantedBy = [ "timers.target" ];
+    timerConfig = {
+      OnCalendar = "daily";
+      Persistent = true;
+      RandomizedDelaySec = "1h";
+    };
+  };
 }

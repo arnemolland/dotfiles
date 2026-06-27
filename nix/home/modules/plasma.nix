@@ -3,16 +3,14 @@
 { lib, pkgs, ... }:
 
 lib.mkIf pkgs.stdenv.isLinux {
-  # VRR "Never" — disable KWin's VRR entirely to avoid mode switches.
-  # Direct scanout is already disabled via KWIN_DRM_NO_DIRECT_SCANOUT=1
-  # (desktop/default.nix) so the compositor never yields to fullscreen apps.
-  # With both settings, entering/leaving fullscreen causes zero display
-  # mode renegotiation — no flicker, no signal loss.
-  # Games that need VRR can use Gamescope as a nested compositor.
+  # VRR "Automatic" — allow Plasma to use adaptive sync for apps that
+  # request it. Direct scanout remains disabled in the host config to keep
+  # NVIDIA mode switches more predictable, but entering/leaving fullscreen
+  # may still reintroduce some flicker on this setup.
   # Values: 0 = Never, 1 = Automatic, 2 = Always
   home.activation.kwinVrrPolicy = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
     run ${pkgs.kdePackages.kconfig}/bin/kwriteconfig6 \
-      --file kwinrc --group Compositing --key VrrPolicy 0
+      --file kwinrc --group Compositing --key VrrPolicy 1
   '';
 
   # Ensure the Breeze splash screen is active so the SDDM-to-desktop

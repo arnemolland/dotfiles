@@ -17,6 +17,18 @@
     gamemode.enable = true;
   };
 
+  # input-remapper — GUI tool to remap evdev devices. Used here to fix the
+  # SCUF Envision Pro's scrambled HID mappings (paddles → ABS_RX, L1 →
+  # BTN_WEST, etc.) by emitting a corrected virtual gamepad.
+  #
+  # Pinned to unstable because 25.11's 2.1.1 crashes on launch against
+  # pygobject 3.54 ("unknown signal name: clicked"); 2.2.0 fixes it.
+  services.input-remapper = {
+    enable = true;
+    package = pkgs.unstable.input-remapper;
+    enableUdevRules = true;
+  };
+
   # Sunshine — game streaming host (pair with Moonlight on client devices).
   # First-time setup: visit https://localhost:47990 in a browser to set credentials.
   # Sunshine can create a virtual display for streaming with the monitor off.
