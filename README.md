@@ -20,6 +20,45 @@ For NixOS:
 sudo nixos-rebuild switch --flake .#<host>
 ```
 
+## NixOS on WSL2
+
+`nixosConfigurations.wsl` is the headless profile: the shared CLI/dev stack
+(zsh, neovim, tmux, git, podman, toolchains) without desktop or bare-metal
+config. It builds on [NixOS-WSL](https://github.com/nix-community/NixOS-WSL).
+
+Fresh container (stock NixOS-WSL image, default user `nixos`):
+
+```bash
+nix-shell -p git --run 'git clone https://github.com/arnemolland/dotfiles ~/dotfiles'
+cd ~/dotfiles
+sudo nixos-rebuild boot --flake .#wsl
+```
+
+The profile renames the default user to `arne`, which needs one restart cycle
+from PowerShell (`<distro>` is the WSL distro name, `NixOS` by default):
+
+```powershell
+wsl -t <distro>
+wsl -d <distro> --user root exit
+wsl -t <distro>
+```
+
+Then, inside the container as `arne`:
+
+```bash
+sudo mv /home/nixos/dotfiles ~ && sudo chown -R arne:users ~/dotfiles
+sudo nixos-rebuild switch --flake ~/dotfiles   # hostname `wsl` selects .#wsl
+```
+
+Notes:
+- Multiple containers can share `.#wsl`. For per-container tweaks, add
+  `nixosConfigurations.<name> = mkWsl "<name>";` in `flake.nix`; the name is
+  also the hostname.
+- `git.nix` rewrites GitHub HTTPS to SSH and signs commits by default: add an
+  SSH key and GPG key in the container before pushing.
+- `BROWSER=wslview` opens links (e.g. `gh auth login`) in the Windows browser;
+  the Neovim clipboard goes through WSLg via `wl-clipboard`.
+
 ## Desktop with NixOS
 
 Fresh install steps (EFI, LUKS+btrfs assumed):

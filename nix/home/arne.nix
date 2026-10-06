@@ -2,11 +2,7 @@
 
 {
   imports = [
-    ./modules/common.nix
-    ./modules/git.nix
-    ./modules/zsh.nix
-    ./modules/tmux.nix
-    ./modules/neovim.nix
+    ./profiles/cli.nix
     ./modules/ghostty.nix
     ./modules/openchamber.nix
     ./modules/openfang.nix

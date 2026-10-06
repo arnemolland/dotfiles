@@ -23,6 +23,8 @@ in
 {
   imports = [
     # Reusable modules — pick and choose per host
+    ../../modules/common/base.nix
+    ../../modules/common/development.nix
     ../../modules/desktop/base.nix
     ../../modules/desktop/environment.nix
     ../../modules/desktop/development.nix

@@ -1,5 +1,5 @@
 {
-  description = "arnemolland/dotfiles (darwin + nixos)";
+  description = "arnemolland/dotfiles (darwin + nixos + wsl)";
 
   inputs = {
     # Platform-specific nixpkgs
@@ -21,7 +21,10 @@
       inputs.nixpkgs.follows = "nixpkgs-linux";
     };
 
-    
+    nixos-wsl = {
+      url = "github:nix-community/NixOS-WSL/release-25.11";
+      inputs.nixpkgs.follows = "nixpkgs-linux";
+    };
 
     lanzaboote = {
       url = "github:nix-community/lanzaboote/v1.0.0";
@@ -80,6 +83,40 @@
           };
         })
       ];
+
+      # Wire home-manager into a NixOS system for user `arne`.
+      hmNixos = profile: [
+        hm-linux.nixosModules.home-manager
+        {
+          home-manager = {
+            useGlobalPkgs = true;
+            useUserPackages = true;
+            extraSpecialArgs = { inherit inputs; };
+            users.arne = import profile;
+          };
+        }
+      ];
+
+      # Headless NixOS-on-WSL2 instance. One call per container; the name
+      # doubles as hostname so `nixos-rebuild switch --flake .` resolves it.
+      mkWsl =
+        hostName:
+        nixpkgs-linux.lib.nixosSystem {
+          system = linuxSystem;
+          specialArgs = { inherit inputs; };
+
+          modules = [
+            {
+              nixpkgs.config.allowUnfree = true;
+              nixpkgs.overlays = mkOverlays linuxSystem;
+              networking.hostName = hostName;
+            }
+
+            inputs.nixos-wsl.nixosModules.default
+            ./nix/nixos/hosts/wsl
+          ]
+          ++ hmNixos ./nix/home/wsl.nix;
+        };
     in
     {
        darwinConfigurations.air = darwin.lib.darwinSystem {
@@ -134,17 +171,10 @@
           inputs.lanzaboote.nixosModules.lanzaboote
           inputs.sops-nix.nixosModules.sops
           inputs.silentSDDM.nixosModules.default
-
-          hm-linux.nixosModules.home-manager
-          {
-            home-manager = {
-              useGlobalPkgs = true;
-              useUserPackages = true;
-              extraSpecialArgs = { inherit inputs; };
-              users.arne = import ./nix/home/arne.nix;
-            };
-          }
-        ];
+        ]
+        ++ hmNixos ./nix/home/arne.nix;
       };
+
+      nixosConfigurations.wsl = mkWsl "wsl";
     };
 }

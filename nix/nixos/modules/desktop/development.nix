@@ -1,106 +1,17 @@
 { pkgs, ... }:
 {
-  # Development toolchain: editors, compilers, languages, CLI utilities,
-  # containers, and dynamic linker support for foreign binaries.
-  #
-  # NOTE: neovim & podman are already added to PATH by their `programs.*` /
-  # `virtualisation.*` options — no need to list them in systemPackages.
-  # ripgrep, eza, fzf, glib live in home-manager (common.nix).
-
-  programs.neovim = {
-    enable = true;
-    defaultEditor = true;
-  };
-
-  programs.nix-ld = {
-    enable = true;
-    libraries = with pkgs; [
-      stdenv.cc.cc
-      zlib
-      openssl
-      libgcc
-
-      # Browser runtime deps (Playwright / Chromium / Electron)
-      glib
-      nspr
-      nss
-      gtk3
-      pango
-      cairo
-      atk
-      dbus
-      expat
-      libdrm
-      mesa
-      libgbm
-      libglvnd
-      libxkbcommon
-      cups
-      at-spi2-core
-      at-spi2-atk
-      pkgs."alsa-lib"
-      xorg.libxshmfence
-      xorg.libX11
-      xorg.libXScrnSaver
-      xorg.libxcb
-      xorg.libXcomposite
-      xorg.libXdamage
-      xorg.libXext
-      xorg.libXfixes
-      xorg.libXrandr
-      xorg.libXtst
-    ];
-  };
-
-  virtualisation = {
-    containers.enable = true;
-    podman = {
-      enable = true;
-      dockerCompat = true;
-      dockerSocket.enable = true;
-      defaultNetwork.settings.dns_enabled = true;
-    };
-  };
+  # Desktop-only development tooling, on top of common/development.nix:
+  # GUI apps, Android, and hardware-backed profiling.
 
   users.users.arne.extraGroups = [
-    "podman"
     "kvm"
     "adbusers"
   ];
 
   environment.systemPackages = with pkgs; [
-    # Terminal multiplexer
-    tmux
-
-    # Profiling / tracing
-    strace
-    ltrace
     sysprof
-
-    # Compilers & build tools
-    gcc
-    gnumake
-    cmake
-
-    # Languages
-    python3
-    nodejs
-    go
-
-    # Containers (compose helpers — podman itself comes from virtualisation.podman)
-    podman-compose
-    docker-compose
-
-    # Libraries (commonly needed for native builds)
-    libwebp
-    vips
-
-    # Dev tools & AI
     dbpro
-    google-cloud-sdk
     opencode-desktop
-    opencode
-    openfang
     android-tools
     android-studio
   ];

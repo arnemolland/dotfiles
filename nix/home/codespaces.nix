@@ -1,13 +1,7 @@
 { ... }:
 
 {
-  imports = [
-    ./modules/common.nix
-    ./modules/git.nix
-    ./modules/zsh.nix
-    ./modules/tmux.nix
-    ./modules/neovim.nix
-  ];
+  imports = [ ./profiles/cli.nix ];
 
   home = {
     username = "codespace";
