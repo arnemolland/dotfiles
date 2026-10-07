@@ -118,6 +118,12 @@
     ];
   };
 
+  # The oh-my-zsh ssh-agent plugin refuses to start without ~/.ssh, which a
+  # fresh user (e.g. a new WSL container) doesn't have yet.
+  home.activation.sshDir = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    run mkdir -p -m 700 "$HOME/.ssh"
+  '';
+
   home.file.".config/zsh/custom/themes/spaceship.zsh-theme".source =
     "${pkgs.spaceship-prompt}/share/zsh/themes/spaceship.zsh-theme";
 }
