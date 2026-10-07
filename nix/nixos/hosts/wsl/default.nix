@@ -19,6 +19,10 @@
   # No password is set on WSL; NixOS-WSL defaults to passwordless sudo.
   programs.gnupg.agent.pinentryPackage = pkgs.pinentry-curses;
 
+  # Own tailnet node so other devices can reach the container directly.
+  # Join once with `sudo tailscale up --ssh --hostname <name>`.
+  services.tailscale.enable = true;
+
   # Hand URLs (gh auth login, xdg-open) to the Windows browser.
   environment.sessionVariables.BROWSER = "wslview";
 

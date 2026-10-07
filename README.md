@@ -56,6 +56,8 @@ Notes:
   also the hostname.
 - `git.nix` rewrites GitHub HTTPS to SSH and signs commits by default: add an
   SSH key and GPG key in the container before pushing.
+- Remote access: run `sudo tailscale up --ssh --hostname <name>` once, then
+  `ssh arne@<name>` from any device on the tailnet.
 - `BROWSER=wslview` opens links (e.g. `gh auth login`) in the Windows browser;
   the Neovim clipboard goes through WSLg via `wl-clipboard`.
 
