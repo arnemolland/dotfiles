@@ -61,5 +61,7 @@
     ncdu
     htop
     btop
+    # Lets `ssh` sessions from Ghostty (TERM=xterm-ghostty) render properly.
+    ghostty.terminfo
   ];
 }
