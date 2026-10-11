@@ -6,6 +6,8 @@
     nixpkgs-darwin.url = "github:NixOS/nixpkgs/nixpkgs-25.11-darwin";
     nixpkgs-linux.url = "github:NixOS/nixpkgs/nixos-25.11";
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+    # Pinned separately so Android SDK bumps don't move pkgs.unstable.
+    nixpkgs-android.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
 
     darwin.url = "github:nix-darwin/nix-darwin/nix-darwin-25.11";
     darwin.inputs.nixpkgs.follows = "nixpkgs-darwin";

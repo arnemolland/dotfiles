@@ -8,6 +8,7 @@
     ../../modules/common/base.nix
     ../../modules/common/development.nix
     ../../modules/ios.nix
+    ../../modules/android.nix
   ];
 
   wsl = {
@@ -25,6 +26,20 @@
   # Own tailnet node so other devices can reach the container directly.
   # Join once with `sudo tailscale up --ssh --hostname <name>`.
   services.tailscale.enable = true;
+
+  # Tailnet ACLs gate who gets in; let them reach dev servers (Metro, ...).
+  networking.firewall.trustedInterfaces = [ "tailscale0" ];
+
+  # Expo/Metro: advertise the tailnet address, so a phone on the tailnet can
+  # open the QR code / exp:// URL.
+  environment.interactiveShellInit = ''
+    if ip=$(tailscale ip -4 2>/dev/null) && [ -n "$ip" ]; then
+      export REACT_NATIVE_PACKAGER_HOSTNAME=$ip
+    fi
+  '';
+
+  # Metro watches whole node_modules trees.
+  boot.kernel.sysctl."fs.inotify.max_user_watches" = 524288;
 
   # Hand URLs (gh auth login, xdg-open) to the Windows browser.
   environment.sessionVariables.BROWSER = "wslview";
