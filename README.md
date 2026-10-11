@@ -61,6 +61,22 @@ Notes:
 - `BROWSER=wslview` opens links (e.g. `gh auth login`) in the Windows browser;
   the Neovim clipboard goes through WSLg via `wl-clipboard`.
 
+### iOS development (WSL)
+
+The WSL profile ships Swift 6.4 (official toolchain, run in an FHS sandbox),
+[xtool](https://xtool.sh), libimobiledevice (`ideviceinfo`, ...), usbmuxd and
+CocoaPods.
+
+- `swift`, `swiftc`, `sourcekit-lsp`, `lldb` work as usual; `swift-env` opens a
+  shell inside the sandbox.
+- Attach the iPhone from Windows with
+  [usbipd-win](https://learn.microsoft.com/windows/wsl/connect-usb):
+  `usbipd bind --busid <id>` once, then `usbipd attach --wsl --busid <id>`.
+  Check with `ideviceinfo`.
+- Run `xtool setup` once with Xcode 27's `Xcode.xip` downloaded.
+- Bumping Swift or xtool: update the version and layer digest in
+  `nix/pkgs/swift-toolchain.nix` / `nix/pkgs/xtool.nix` (see their comments).
+
 ## Desktop with NixOS
 
 Fresh install steps (EFI, LUKS+btrfs assumed):

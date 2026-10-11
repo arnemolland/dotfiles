@@ -7,11 +7,14 @@
   imports = [
     ../../modules/common/base.nix
     ../../modules/common/development.nix
+    ../../modules/ios.nix
   ];
 
   wsl = {
     enable = true;
     defaultUser = "arne";
+    # USB passthrough from Windows (usbipd-win), e.g. an iPhone for xtool.
+    usbip.enable = true;
   };
 
   home-manager.backupFileExtension = "bak";
