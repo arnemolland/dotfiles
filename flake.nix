@@ -6,8 +6,9 @@
     nixpkgs-darwin.url = "github:NixOS/nixpkgs/nixpkgs-25.11-darwin";
     nixpkgs-linux.url = "github:NixOS/nixpkgs/nixos-25.11";
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
-    # Pinned separately so Android SDK bumps don't move pkgs.unstable.
-    nixpkgs-android.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+    # Fast-moving tools (Android SDK, Claude Code) as pkgs.edge; pinned
+    # separately so bumping them doesn't move pkgs.unstable.
+    nixpkgs-edge.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
 
     darwin.url = "github:nix-darwin/nix-darwin/nix-darwin-25.11";
     darwin.inputs.nixpkgs.follows = "nixpkgs-darwin";
@@ -69,6 +70,7 @@
       hm-linux,
       nixpkgs-linux,
       nixpkgs-unstable,
+      nixpkgs-edge,
       ...
     }:
     let
@@ -76,12 +78,20 @@
       linuxSystem = "x86_64-linux";
 
       # Shared overlay: custom packages + nixpkgs-unstable as pkgs.unstable
+      # and nixpkgs-edge as pkgs.edge
       mkOverlays = system: [
         (import ./nix/overlays)
         (_final: _prev: {
           unstable = import nixpkgs-unstable {
             inherit system;
             config.allowUnfree = true;
+          };
+          edge = import nixpkgs-edge {
+            inherit system;
+            config = {
+              allowUnfree = true;
+              android_sdk.accept_license = true;
+            };
           };
         })
       ];

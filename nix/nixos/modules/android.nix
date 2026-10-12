@@ -1,20 +1,13 @@
-{ pkgs, inputs, ... }:
+{ pkgs, ... }:
 
 let
-  # Newer androidenv than the system channel: React Native 0.87 compiles
-  # against Android 37, which 25.11's SDK catalogue doesn't carry yet.
-  androidPkgs = import inputs.nixpkgs-android {
-    inherit (pkgs.stdenv.hostPlatform) system;
-    config = {
-      allowUnfree = true;
-      android_sdk.accept_license = true;
-    };
-  };
-
+  # pkgs.edge's androidenv: React Native 0.87 compiles against Android 37,
+  # which 25.11's SDK catalogue doesn't carry yet.
+  #
   # Read-only SDK: Gradle can't download into it, so it must already hold
   # what projects compile against. Covers React Native 0.86–0.87 / Expo.
   sdk =
-    (androidPkgs.androidenv.composeAndroidPackages {
+    (pkgs.edge.androidenv.composeAndroidPackages {
       platformVersions = [
         "36"
         "37.0"
