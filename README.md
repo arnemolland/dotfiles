@@ -58,8 +58,10 @@ Notes:
   SSH key and GPG key in the container before pushing.
 - Remote access: run `sudo tailscale up --ssh --hostname <name>` once, then
   `ssh arne@<name>` from any device on the tailnet.
-- Claude Code (`claude`) and the Android SDK come from the `nixpkgs-edge`
-  input; update them with `nix flake update nixpkgs-edge`.
+- Claude Code: the official native install, which keeps itself on the latest
+  release. The first `claude` run installs it into `~/.local/bin`.
+- The Android SDK comes from the `nixpkgs-edge` input; update it with
+  `nix flake update nixpkgs-edge`.
 - `BROWSER=wslview` opens links (e.g. `gh auth login`) in the Windows browser;
   the Neovim clipboard goes through WSLg via `wl-clipboard`.
 

@@ -6,7 +6,7 @@
     nixpkgs-darwin.url = "github:NixOS/nixpkgs/nixpkgs-25.11-darwin";
     nixpkgs-linux.url = "github:NixOS/nixpkgs/nixos-25.11";
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
-    # Fast-moving tools (Android SDK, Claude Code) as pkgs.edge; pinned
+    # Fast-moving tools (e.g. the Android SDK) as pkgs.edge; pinned
     # separately so bumping them doesn't move pkgs.unstable.
     nixpkgs-edge.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
 
