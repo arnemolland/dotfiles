@@ -46,6 +46,7 @@ let
         libuuid
         libxml2_13
         ncursesNarrow
+        openssl
         pkg-config
         python312
         sqlite

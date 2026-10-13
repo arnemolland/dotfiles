@@ -31,6 +31,10 @@ let
       mkdir -p $out
       tar -xzf $src -C $out --strip-components=3 usr/local/xtool
       test -e $out/AppRun
+
+      # Drop the bundled OpenSSL 3.0: it shadows the env's newer one, which
+      # the env's libcurl needs (OPENSSL_3.5.0). 3.x is backward compatible.
+      rm -f $out/usr/lib/libssl.so* $out/usr/lib/libcrypto.so*
     '';
   };
 in

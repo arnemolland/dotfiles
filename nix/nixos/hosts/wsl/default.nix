@@ -27,9 +27,6 @@
   # Join once with `sudo tailscale up --ssh --hostname <name>`.
   services.tailscale.enable = true;
 
-  # Tailnet ACLs gate who gets in; let them reach dev servers (Metro, ...).
-  networking.firewall.trustedInterfaces = [ "tailscale0" ];
-
   # Expo/Metro: advertise the tailnet address, so a phone on the tailnet can
   # open the QR code / exp:// URL.
   environment.interactiveShellInit = ''

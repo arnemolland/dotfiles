@@ -89,8 +89,7 @@ CocoaPods.
   `nix/nixos/modules/android.nix`.
 - Metro over the tailnet: install Tailscale on the phone, then
   `npx expo start` in WSL. Shells export `REACT_NATIVE_PACKAGER_HOSTNAME` as
-  the container's tailnet IP, so the QR code works as-is. `tailscale0` is a
-  trusted firewall interface.
+  the container's tailnet IP, so the QR code works as-is.
 - Android over USB instead: attach it with usbipd, then
   `adb reverse tcp:8081 tcp:8081`.
 
